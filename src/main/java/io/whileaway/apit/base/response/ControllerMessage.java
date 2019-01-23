@@ -1,11 +1,11 @@
 package io.whileaway.apit.base.response;
 
-public enum SuccessRespomse implements TestResponseEnum{
+public enum ControllerMessage implements TestResponseEnum{
     SUCCESS("成功");
 
     private String message;
 
-    SuccessRespomse(String message) {
+    ControllerMessage(String message) {
         this.message = message;
     }
 

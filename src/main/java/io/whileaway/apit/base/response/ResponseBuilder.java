@@ -1,20 +1,23 @@
 package io.whileaway.apit.base.response;
 
 
+import io.whileaway.apit.base.CommonException;
+import io.whileaway.apit.base.enums.ErrorResponse;
+
 import java.util.function.Supplier;
 
-public class ResponseBuilder <T extends TestResponse>{
-    private final T in;
+public class ResponseBuilder <T>{
+    private final Response in;
 
-    public ResponseBuilder(Supplier<T> t) {
-        this.in = t.get();
+    public ResponseBuilder(Supplier<Response> testResponse) {
+        this.in = testResponse.get();
     }
 
-    public ResponseBuilder(T t) {
-        this.in = t;
+    private ResponseBuilder(Response response) {
+        this.in = response;
     }
 
-    public ResponseBuilder<T> setHttpStatus(HttpCodeEnum httpCodeEnum) {
+    public ResponseBuilder<Response> setHttpStatus(HttpCodeEnum httpCodeEnum) {
         in.setCode(httpCodeEnum.getCode());
         return new ResponseBuilder(in);
     }
@@ -24,7 +27,16 @@ public class ResponseBuilder <T extends TestResponse>{
         return new ResponseBuilder<T>(in);
     }
 
-    public T build() {
+    public ResponseBuilder<T> setData(T t) {
+        in.setData(t);
+        return new ResponseBuilder<T>(in);
+    }
+
+    public Response ok() {
         return this.in;
+    }
+
+    public void error() {
+        throw new CommonException(ErrorResponse.ERROR);
     }
 }
