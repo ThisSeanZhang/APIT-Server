@@ -33,13 +33,14 @@ public class DeveloperControllerTest {
     public void testDevelopAbsentParameter() throws Exception {
         String json = "{\"developerName\":\"sean\"," +
                 "\"developerPass\":\"123456\"," +
-                "\"joinTime\":\"2018-12\"}";
+                "\"joinTime\":\"2018-12-12\"," +
+                "\"email\":\"cccc\"}";
         mvc.perform(
-                MockMvcRequestBuilders.post("/developer")
+                MockMvcRequestBuilders.post("/developers")
                         .contentType(MediaType.APPLICATION_JSON_UTF8_VALUE)
                         .content(json.getBytes()) //传json参数
         )
-                .andExpect(MockMvcResultMatchers.status().is4xxClientError())
+                .andExpect(MockMvcResultMatchers.status().is2xxSuccessful())
                 .andDo(MockMvcResultHandlers.print());
     }
 

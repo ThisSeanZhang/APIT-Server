@@ -5,17 +5,13 @@ import io.whileaway.apit.account.service.DeveloperService;
 import io.whileaway.apit.base.Result;
 import io.whileaway.apit.base.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.bind.BindResult;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/developer")
+@RequestMapping("/developers")
 public class DeveloperController {
 
     @Autowired
@@ -25,6 +21,16 @@ public class DeveloperController {
     public Result createDeveloper(@Valid  @RequestBody CreateDeveloper createDeveloper, BindingResult bindingResult){
         ResultUtil.inspect(bindingResult);
         return developerService.createDeveloper(createDeveloper.convertToDeveloper());
+    }
+
+    @GetMapping("/email/{email}")
+    public Result emailIsExists(@PathVariable("email") String email){
+        return developerService.emailIsExists(email);
+    }
+
+    @GetMapping("/developer-name/{developerName}")
+    public Result developerNameIsExists(@PathVariable("developerName") String developerName){
+        return developerService.nameIsExists(developerName);
     }
 
 }

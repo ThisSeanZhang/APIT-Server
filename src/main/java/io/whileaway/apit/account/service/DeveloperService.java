@@ -5,7 +5,10 @@ import io.whileaway.apit.base.Result;
 
 public interface DeveloperService {
 
-    Result createDeveloper(Developer developer);
+    Result<Developer> createDeveloper(Developer developer);
 
+    Result<String> emailIsExists(String email);
+
+    Result<String> nameIsExists(String name);
     Developer findByName(String developerName);
 }

@@ -1,10 +1,8 @@
 package io.whileaway.apit.base;
 
-import io.whileaway.apit.base.enums.ResponseEnum;
+import io.whileaway.apit.base.enums.ControllerEnum;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 
-import java.util.Collections;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,13 +32,14 @@ public class ResultUtil {
         return success(code, message, null);
     }
 
-    public static<T> Result<T> success(ResponseEnum responseEnum, T data) {
-        return success(responseEnum.getCode(), responseEnum.getMessage(), data);
+    public static<T> Result<T> success(ControllerEnum controllerEnum, T data) {
+        return success(controllerEnum.getCode(), controllerEnum.getMessage(), data);
     }
 
-    public static<T> Result<T> success(ResponseEnum responseEnum) {
-        return success(responseEnum.getCode(), responseEnum.getMessage(), null);
+    public static<T> Result<T> success(ControllerEnum controllerEnum) {
+        return success(controllerEnum.getCode(), controllerEnum.getMessage(), null);
     }
+
 
     public static void inspect(BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {
