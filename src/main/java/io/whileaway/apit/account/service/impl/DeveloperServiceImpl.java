@@ -19,7 +19,7 @@ public class DeveloperServiceImpl implements DeveloperService {
 
     @Override
     public Result<Developer> createDeveloper(Developer developer) {
-        return ResultUtil.success(ResponseEnum.SUCCESS, developer);
+        return ResultUtil.success(ResponseEnum.SUCCESS, null);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package io.whileaway.apit.account;
+package io.whileaway.apit.account.service;
 
 import io.whileaway.apit.account.entity.Developer;
 import io.whileaway.apit.account.repository.DeveloperRepository;
@@ -32,5 +32,11 @@ public class DeveloperTest {
     public void testCreateDeveloper() {
         developerService.createDeveloper(willBeSaveDeveloper);
         Assert.assertNotNull(developerService.findByName(willBeSaveDeveloper.getDeveloperName()));
+    }
+
+    @Test
+    public void testWithOutSomeParam() {
+        developerService.createDeveloper(new Developer());
+//        Assert.assertNotNull(developerService.findByName(willBeSaveDeveloper.getDeveloperName()));
     }
 }
