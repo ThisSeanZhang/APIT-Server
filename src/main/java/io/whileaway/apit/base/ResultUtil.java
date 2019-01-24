@@ -8,7 +8,6 @@ public class ResultUtil {
         Result result = new Result();
         result.setStatus(code);
         result.setMessage(message);
-        result.setData(null);
         return result;
     }
 
@@ -16,23 +15,23 @@ public class ResultUtil {
         return error(e.getCode(),e.getMessage());
     }
 
-    public static Result success(Integer code, String message, Object o) {
-        Result result = new Result();
+    public static<T> Result<T> success(Integer code, String message, T data) {
+        Result<T> result = new Result<>();
         result.setStatus(code);
         result.setMessage(message);
-        result.setData(o);
+        result.setData(data);
         return result;
     }
 
-    public static Result success(Integer code, String message) {
+    public static<T> Result<T> success(Integer code, String message) {
         return success(code, message, null);
     }
 
-    public static Result success(ResponseEnum responseEnum, Object o) {
-        return success(responseEnum.getCode(), responseEnum.getMessage(), o);
+    public static<T> Result<T> success(ResponseEnum responseEnum, T data) {
+        return success(responseEnum.getCode(), responseEnum.getMessage(), data);
     }
 
-    public static Result success(ResponseEnum responseEnum) {
+    public static<T> Result<T> success(ResponseEnum responseEnum) {
         return success(responseEnum.getCode(), responseEnum.getMessage(), null);
     }
 }

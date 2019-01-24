@@ -1,9 +1,9 @@
 package io.whileaway.apit.account;
 
-import io.whileaway.apit.ApitServerApplication;
 import io.whileaway.apit.account.entity.Developer;
 import io.whileaway.apit.account.repository.DeveloperRepository;
 import io.whileaway.apit.account.service.DeveloperService;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,12 +25,12 @@ public class DeveloperTest {
 
     @Before
     public void initData() {
-        // "Sean","123456"
-        willBeSaveDeveloper = new Developer();
+        willBeSaveDeveloper = new Developer("Sean","123456", "thisseanzhang@gmail.com");
     }
 
     @Test
     public void testCreateDeveloper() {
         developerService.createDeveloper(willBeSaveDeveloper);
+        Assert.assertNotNull(developerService.findByName(willBeSaveDeveloper.getDeveloperName()));
     }
 }

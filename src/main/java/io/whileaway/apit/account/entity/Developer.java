@@ -12,13 +12,16 @@ public class Developer {
     private String developerName;
     @Column(length = 16, nullable = false)
     private String developerPass;
+    @Column(length = 50, nullable = false)
+    private String email;
 
     public Developer() {
     }
 
-    public Developer(String developerName, String developerPass) {
+    public Developer(String developerName, String developerPass, String email) {
         this.developerName = developerName;
         this.developerPass = developerPass;
+        this.email = email;
     }
 
     public Long getDeveloperId() {
@@ -43,5 +46,13 @@ public class Developer {
 
     public void setDeveloperPass(String developerPass) {
         this.developerPass = developerPass;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

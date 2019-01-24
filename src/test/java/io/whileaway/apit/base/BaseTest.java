@@ -1,5 +1,7 @@
 package io.whileaway.apit.base;
 
+import io.whileaway.apit.base.enums.ErrorResponse;
+import io.whileaway.apit.base.enums.ResultEnum;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.junit.Before;
@@ -38,5 +40,10 @@ public class BaseTest {
         )
                 .andExpect(MockMvcResultMatchers.status().is5xxServerError())
                 .andDo(MockMvcResultHandlers.print());
+    }
+
+    @Test
+    public void testEnumStream() {
+        ErrorResponse.ERROR.getEnumStream().forEach(en -> System.out.println(en.getCode()));
     }
 }

@@ -10,6 +10,8 @@ public class CreateDeveloper {
     private String developerName;
     @NotNull(message = "")
     private String developerPass;
+    @NotNull(message = "")
+    private String email;
 
     public String getDeveloperName() {
         return developerName;
@@ -27,7 +29,15 @@ public class CreateDeveloper {
         this.developerPass = developerPass;
     }
 
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Developer convertToDeveloper() {
-        return new Developer(this.developerName, this.developerPass);
+        return new Developer(this.developerName, this.developerPass, this.email);
     }
 }

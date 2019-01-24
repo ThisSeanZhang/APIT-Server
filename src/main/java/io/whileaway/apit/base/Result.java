@@ -5,7 +5,33 @@ public class Result<T> {
     private Integer status;
     private String message;
     private T data;
-    private String redirct;
+    private String redirect;
+
+    public Result() {
+    }
+
+    public Result(Integer status, String message, T data) {
+        this.status = status;
+        this.message = message;
+        this.data = data;
+    }
+
+    public Result(T data) {
+        this.data = data;
+    }
+
+    public Result(String message, T data, String redirect) {
+        this.message = message;
+        this.data = data;
+        this.redirect = redirect;
+    }
+
+    public Result(Integer code, String message, T data, String redirect) {
+        this.status = code;
+        this.message = message;
+        this.data = data;
+        this.redirect = redirect;
+    }
 
     public Integer getStatus() {
         return status;
@@ -31,11 +57,11 @@ public class Result<T> {
         this.data = data;
     }
 
-    public String getRedirct() {
-        return redirct;
+    public String getRedirect() {
+        return redirect;
     }
 
-    public void setRedirct(String redirct) {
-        this.redirct = redirct;
+    public void setRedirect(String redirect) {
+        this.redirect = redirect;
     }
 }

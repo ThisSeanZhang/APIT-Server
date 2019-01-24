@@ -1,4 +1,4 @@
-package io.whileaway.apit.account.enums;
+package io.whileaway.apit.account.enums.error;
 
 import io.whileaway.apit.base.enums.ErrorResponse;
 import io.whileaway.apit.base.enums.ResultEnum;
