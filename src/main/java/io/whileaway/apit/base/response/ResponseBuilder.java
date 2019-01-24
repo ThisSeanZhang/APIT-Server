@@ -7,29 +7,30 @@ import io.whileaway.apit.base.enums.ErrorResponse;
 import java.util.function.Supplier;
 
 public class ResponseBuilder <T>{
-    private final Response in;
 
-    public ResponseBuilder(Supplier<Response> testResponse) {
+    private final Response<T> in;
+
+    public ResponseBuilder(Supplier<Response<T>> testResponse) {
         this.in = testResponse.get();
     }
 
-    private ResponseBuilder(Response response) {
+    private ResponseBuilder(Response<T> response) {
         this.in = response;
     }
 
-    public ResponseBuilder<Response> setHttpStatus(HttpCodeEnum httpCodeEnum) {
+    public ResponseBuilder<T> setHttpStatus(HttpCodeEnum httpCodeEnum) {
         in.setCode(httpCodeEnum.getCode());
-        return new ResponseBuilder(in);
+        return new ResponseBuilder<>(in);
     }
 
     public ResponseBuilder<T> setMessage(TestResponseEnum testResponseEnum) {
         in.setMessage(testResponseEnum.getMessage());
-        return new ResponseBuilder<T>(in);
+        return new ResponseBuilder<>(in);
     }
 
     public ResponseBuilder<T> setData(T t) {
         in.setData(t);
-        return new ResponseBuilder<T>(in);
+        return new ResponseBuilder<>(in);
     }
 
     public Response ok() {
