@@ -6,6 +6,9 @@ import io.whileaway.apit.account.service.DeveloperService;
 import io.whileaway.apit.base.*;
 import io.whileaway.apit.base.enums.ControllerEnum;
 import io.whileaway.apit.base.enums.ResponseEnum;
+import io.whileaway.apit.base.trial.Biss;
+import io.whileaway.apit.base.trial.BissBuilder;
+import io.whileaway.apit.base.trial.BissInspecter;
 import io.whileaway.apit.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,12 +33,22 @@ public class DeveloperServiceImpl implements DeveloperService {
 
     @Override
     public Result<String> emailIsExists(String email) {
-        return whatIsExists(email, StringUtils::isEmptyOrBlank, developerRepository::findByEmail , Developer::getEmail);
+        return whatIsExists(email,
+                StringUtils::isEmptyOrBlank,
+                developerRepository::findByEmail ,
+                Developer::getEmail);
     }
 
     @Override
     public Result<String> nameIsExists(String name) {
-        return whatIsExists(name, StringUtils::isEmptyOrBlank, developerRepository::findByDeveloperName , Developer::getDeveloperName);
+//        return new Biss<String, Developer, String>(name)
+//                .inspectParam(StringUtils::isEmptyOrBlank)
+//                .findInDB(developerRepository::findByDeveloperName)
+//                .convert(Developer::getDeveloperName);
+        return new BissInspecter<String, Developer, String>(name)
+                .inspect(StringUtils::isEmptyOrBlank)
+                .findInDB(developerRepository::findByDeveloperName)
+                .convert(Developer::getDeveloperName);
     }
 
     @Override
