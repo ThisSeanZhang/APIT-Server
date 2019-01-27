@@ -33,22 +33,23 @@ public class DeveloperServiceImpl implements DeveloperService {
 
     @Override
     public Result<String> emailIsExists(String email) {
-        return whatIsExists(email,
-                StringUtils::isEmptyOrBlank,
-                developerRepository::findByEmail ,
-                Developer::getEmail);
+        return new Biss<String, Developer, String>(email)
+                .inspectParam(StringUtils::isEmptyOrBlank)
+                .findInDB(developerRepository::findByEmail)
+                .convert(Developer::getDeveloperName);
     }
 
     @Override
     public Result<String> nameIsExists(String name) {
-//        return new Biss<String, Developer, String>(name)
-//                .inspectParam(StringUtils::isEmptyOrBlank)
-//                .findInDB(developerRepository::findByDeveloperName)
-//                .convert(Developer::getDeveloperName);
-        return new BissInspecter<String, Developer, String>(name)
-                .inspect(StringUtils::isEmptyOrBlank)
+        return new Biss<String, Developer, String>(name)
+                .inspectParam(StringUtils::isEmptyOrBlank)
                 .findInDB(developerRepository::findByDeveloperName)
                 .convert(Developer::getDeveloperName);
+
+//        return new BissInspecter<String, Developer, String>(name)
+//                .inspect(StringUtils::isEmptyOrBlank)
+//                .findInDB(developerRepository::findByDeveloperName)
+//                .convert(Developer::getDeveloperName);
     }
 
     @Override
@@ -61,6 +62,20 @@ public class DeveloperServiceImpl implements DeveloperService {
         return function.apply(developer);
     }
 
+    /**
+     * 过渡的写法
+     * @param args
+     * @param isNull
+     * @param findInDB
+     * @param convert
+     * @param <A>
+     * @param <B>
+     * @param <C>
+     * @return return whatIsExists(email,
+     *                 StringUtils::isEmptyOrBlank,
+     *                 developerRepository::findByEmail ,
+     *                 Developer::getEmail);
+     */
     private static<A, B, C> Result<C> whatIsExists(A args, Predicate<A> isNull, Function<A, Optional<B>> findInDB, Function<B, C> convert) {
         if (isNull.test(args)) {
             throw new CommonException(ControllerEnum.PARAMETER_ERROR);
