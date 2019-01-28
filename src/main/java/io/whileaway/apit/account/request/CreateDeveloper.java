@@ -3,16 +3,20 @@ package io.whileaway.apit.account.request;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.whileaway.apit.account.entity.Developer;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class CreateDeveloper {
 
     @NotNull(message = "")
+    @NotBlank(message = "email不能为空")
     private String developerName;
     @NotNull(message = "")
+    @NotBlank(message = "email不能为空")
     private String developerPass;
     @NotNull(message = "")
+    @NotBlank(message = "email不能为空")
     private String email;
 
 //    @NotNull
