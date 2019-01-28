@@ -28,7 +28,7 @@ public class DeveloperServiceImpl implements DeveloperService {
         if (StringUtils.anyIsEmptyOrBlank(developer.getDeveloperName(), developer.getDeveloperPass(), developer.getEmail())) {
             throw new CommonException(ControllerEnum.PARAMETER_ERROR);
         }
-        return ResultUtil.success(ControllerEnum.SUCCESS, null);
+        return ResultUtil.success(ControllerEnum.SUCCESS, developerRepository.save(developer));
     }
 
     @Override

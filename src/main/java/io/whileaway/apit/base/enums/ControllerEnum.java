@@ -17,16 +17,16 @@ public enum ControllerEnum implements ResultEnum{
 
     @Override
     public Integer getCode() {
-        return null;
+        return this.code;
     }
 
     @Override
     public String getMessage() {
-        return null;
+        return this.message;
     }
 
     @Override
     public Stream<ResultEnum> getEnumStream() {
-        return null;
+        return Stream.of(values());
     }
 }

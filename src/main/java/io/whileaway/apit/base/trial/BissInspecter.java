@@ -19,4 +19,5 @@ public class BissInspecter<A ,B, C> {
         }
         return new BissFinder<A, B, C>(this.arg);
     }
+
 }
