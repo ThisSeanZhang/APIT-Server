@@ -7,12 +7,11 @@ import io.whileaway.apit.base.*;
 import io.whileaway.apit.base.enums.ControllerEnum;
 import io.whileaway.apit.base.enums.ResponseEnum;
 import io.whileaway.apit.base.trial.Biss;
-import io.whileaway.apit.base.trial.BissBuilder;
-import io.whileaway.apit.base.trial.BissInspecter;
 import io.whileaway.apit.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -55,7 +54,26 @@ public class DeveloperServiceImpl implements DeveloperService {
     @Override
     public Developer findByName(String developerName) {
         Optional<Developer> developer = developerRepository.findByDeveloperName(developerName);
+        if (developer.isEmpty()) {
+            throw new CommonException(ControllerEnum.NOT_FOUND);
+        }
         return developer.get();
+    }
+
+    @Override
+    public Developer findByEmail(String email) {
+        Optional<Developer> developer = developerRepository.findByEmail(email);
+        if (developer.isEmpty()) {
+            throw new CommonException(ControllerEnum.NOT_FOUND);
+        }
+        return developer.get();
+    }
+
+    @Override
+    public List<Developer> findByEmailOrDeveloperName(String email, String developerName) {
+        Optional<List<Developer>> primitive = developerRepository.findByEmailOrDeveloperName(email, developerName);
+        if (primitive.isEmpty() || primitive.get().isEmpty()) throw new CommonException(ControllerEnum.NOT_FOUND);
+        return primitive.get();
     }
 
     public Result<Developer> getResult(Function<Developer,Result<Developer>> function, Developer developer, ResponseEnum responseEnum) {

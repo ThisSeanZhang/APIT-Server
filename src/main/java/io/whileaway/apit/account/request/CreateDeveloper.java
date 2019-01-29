@@ -2,6 +2,7 @@ package io.whileaway.apit.account.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.whileaway.apit.account.entity.Developer;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,13 +10,16 @@ import java.util.Date;
 
 public class CreateDeveloper {
 
-    @NotNull(message = "")
-    @NotBlank(message = "email不能为空")
+    @NotNull(message = "require developerName")
+    @NotBlank(message = "开发者名称不能为空")
+    @Length(min = 1 ,max = 20)
     private String developerName;
-    @NotNull(message = "")
-    @NotBlank(message = "email不能为空")
+    @NotNull(message = "require developerPass")
+    @Length(min = 1 ,max = 20)
+    @NotBlank(message = "密码不能为空")
     private String developerPass;
-    @NotNull(message = "")
+    @NotNull(message = "require email")
+    @Length(min = 1 ,max = 20)
     @NotBlank(message = "email不能为空")
     private String email;
 
