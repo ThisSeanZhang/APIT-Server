@@ -18,7 +18,8 @@ public class API {
     private String headers;
     private String body;
     private Long apiOwner;
-    private Long belongFloder;
+    private Long belongFolder;
+    private Long belongProject;
 
     public Long getAid() {
         return aid;
@@ -84,11 +85,19 @@ public class API {
         this.apiOwner = apiOwner;
     }
 
-    public Long getBelongFloder() {
-        return belongFloder;
+    public Long getBelongFolder() {
+        return belongFolder;
     }
 
-    public void setBelongFloder(Long belongFloder) {
-        this.belongFloder = belongFloder;
+    public void setBelongFolder(Long belongFolder) {
+        this.belongFolder = belongFolder;
+    }
+
+    public Long getBelongProject() {
+        return belongProject;
+    }
+
+    public void setBelongProject(Long belongProject) {
+        this.belongProject = belongProject;
     }
 }

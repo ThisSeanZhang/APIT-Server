@@ -1,28 +1,11 @@
-package io.whileaway.apit.api.entity;
+package io.whileaway.apit.api.request;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+public class FilterFolder {
 
-@Entity
-public class Folder {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long fid;
     private String folderName;
     private Long parentId;
     private Long folderOwnerId;
     private Long belongProject;
-
-    public Long getFid() {
-        return fid;
-    }
-
-    public void setFid(Long fid) {
-        this.fid = fid;
-    }
 
     public String getFolderName() {
         return folderName;
@@ -40,19 +23,19 @@ public class Folder {
         this.parentId = parentId;
     }
 
-    public Long getBelongProject() {
-        return belongProject;
-    }
-
-    public void setBelongProject(Long belongProject) {
-        this.belongProject = belongProject;
-    }
-
     public Long getFolderOwnerId() {
         return folderOwnerId;
     }
 
     public void setFolderOwnerId(Long folderOwnerId) {
         this.folderOwnerId = folderOwnerId;
+    }
+
+    public Long getBelongProject() {
+        return belongProject;
+    }
+
+    public void setBelongProject(Long belongProject) {
+        this.belongProject = belongProject;
     }
 }

@@ -1,4 +1,4 @@
-package io.whileaway.apit.account.service.impl;
+package io.whileaway.apit.account.service;
 
 import io.whileaway.apit.account.entity.Developer;
 import io.whileaway.apit.account.request.CreateSession;
