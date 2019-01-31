@@ -6,3 +6,4 @@ INSERT INTO `apit_server`.`project`(`pid`, `project_name`, `project_owner`) VALU
 
 # 文件夹
 INSERT INTO `apit_server`.`folder`(`fid`, `belong_project`, `folder_name`, `folder_owner`, `parent_id`) VALUES (1, 1, '默认文件夹', '1', NULL);
+INSERT INTO `apit_server`.`folder`(`fid`, `belong_project`, `folder_name`, `folder_owner_id`, `parent_id`) VALUES (2, 1, 'AAA', 1, NULL);

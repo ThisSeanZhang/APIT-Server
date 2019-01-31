@@ -38,4 +38,14 @@ public class FilterFolder {
     public void setBelongProject(Long belongProject) {
         this.belongProject = belongProject;
     }
+
+    @Override
+    public String toString() {
+        return "FilterFolder{" +
+                "folderName='" + folderName + '\'' +
+                ", parentId=" + parentId +
+                ", folderOwnerId=" + folderOwnerId +
+                ", belongProject=" + belongProject +
+                '}';
+    }
 }

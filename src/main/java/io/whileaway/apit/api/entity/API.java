@@ -11,6 +11,7 @@ public class API {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long aid;
+    private String apiName;
     private String method;
     private String bewrite;
     private String url;
@@ -99,5 +100,13 @@ public class API {
 
     public void setBelongProject(Long belongProject) {
         this.belongProject = belongProject;
+    }
+
+    public String getApiName() {
+        return apiName;
+    }
+
+    public void setApiName(String apiName) {
+        this.apiName = apiName;
     }
 }

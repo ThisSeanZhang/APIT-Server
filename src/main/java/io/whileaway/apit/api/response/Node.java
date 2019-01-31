@@ -1,5 +1,6 @@
 package io.whileaway.apit.api.response;
 
+import io.whileaway.apit.api.entity.API;
 import io.whileaway.apit.api.entity.Folder;
 
 public class Node {
@@ -12,6 +13,12 @@ public class Node {
         this.nid = folder.getFid();
         this.label = folder.getFolderName();
         this.leaf = false;
+    }
+
+    public Node(API api) {
+        this.nid = api.getAid();
+        this.label = api.getApiName();
+        this.leaf = true;
     }
 
     public Long getNid() {
