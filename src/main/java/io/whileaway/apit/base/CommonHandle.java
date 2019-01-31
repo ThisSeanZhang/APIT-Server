@@ -2,7 +2,9 @@ package io.whileaway.apit.base;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
+import io.whileaway.apit.base.enums.ControllerEnum;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -19,6 +21,13 @@ public class CommonHandle {
 //        CommonException commonException = (CommonException) e;
         response.setStatus(commonException.getCode());
         return ResultUtil.error(commonException);
+    }
+
+    @ExceptionHandler(value = MissingServletRequestParameterException.class)
+    @ResponseBody
+    public Result requestHandle(MissingServletRequestParameterException exception, HttpServletResponse response) {
+        response.setStatus(ControllerEnum.PARAMETER_ERROR.getCode());
+        return ResultUtil.error(ControllerEnum.PARAMETER_ERROR.getCode(), exception.getMessage());
     }
 
     @ExceptionHandler(value = InvalidFormatException.class)
