@@ -1,13 +1,13 @@
 package io.whileaway.apit.api.controller;
 
 import io.whileaway.apit.api.entity.Project;
+import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.api.service.ProjectService;
+import io.whileaway.apit.base.CommonException;
 import io.whileaway.apit.base.Result;
+import io.whileaway.apit.base.enums.ControllerEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -26,4 +26,11 @@ public class ProjectController {
     public Result<List<Project>> getProjectsByOwnerId (@PathVariable("id") Long id) {
         return projectService.getProjectsByOwnerId(id);
     }
+
+    @GetMapping("/content/first-layer")
+    public Result<List<Node>> getFirstLayerContent (@RequestParam("belongProject") Long belongProject, @RequestParam("folderOwnerId") Long folderOwnerId) {
+        if (belongProject == null || folderOwnerId == null) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
+        return projectService.firstLayerContent(belongProject, folderOwnerId);
+    }
+
 }

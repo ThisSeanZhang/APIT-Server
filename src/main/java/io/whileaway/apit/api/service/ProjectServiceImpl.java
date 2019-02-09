@@ -2,6 +2,7 @@ package io.whileaway.apit.api.service;
 
 import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.repository.ProjectRepository;
+import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.base.CommonException;
 import io.whileaway.apit.base.Result;
 import io.whileaway.apit.base.ResultUtil;
@@ -20,9 +21,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
 
+    private final FolderService folderService;
+
     @Autowired
-    public ProjectServiceImpl(ProjectRepository projectRepository) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, FolderService folderService) {
         this.projectRepository = projectRepository;
+        this.folderService = folderService;
     }
 
     @Override
@@ -31,6 +35,11 @@ public class ProjectServiceImpl implements ProjectService {
                 .inspectParam(Objects::isNull)
                 .findInDB(projectRepository::findByProjectOwner)
                 .doNothing();
+    }
+
+    @Override
+    public Result<List<Node>> firstLayerContent(Long belongProject, Long folderOwnerId) {
+        return folderService.firstLayerFolders(belongProject, folderOwnerId);
     }
 
 

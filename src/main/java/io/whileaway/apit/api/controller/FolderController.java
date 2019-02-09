@@ -33,8 +33,8 @@ public class FolderController {
         return folderService.firstLayerFolders(belongProject, folderOwnerId);
     }
 
-    @GetMapping()
-    public Result<List<Node>> filterFolders (FilterFolder FilterFolder) {
-        return folderService.filterFolders(FilterFolder);
+    @GetMapping("/content")
+    public Result<List<Node>> filterFolders (FilterFolder filterFolder) {
+        return folderService.folderContent(filterFolder);
     }
 }
