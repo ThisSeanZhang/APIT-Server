@@ -6,10 +6,12 @@ import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.api.specs.APISpec;
 import io.whileaway.apit.base.Result;
 import io.whileaway.apit.base.Spec;
+import io.whileaway.apit.utils.DataBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class APIServiceImpl implements APIService {
@@ -27,5 +29,13 @@ public class APIServiceImpl implements APIService {
                 .appendCondition(APISpec.belongFolder(()->belongFolder))
                 .findInDB(apiRepository::findAll)
                 .convert(Node::new);
+    }
+
+    @Override
+    public Result<API> findById(Long aid) {
+        return new DataBuilder<Long, API, API>(aid)
+                .inspectParam(Objects::isNull)
+                .findInDB(apiRepository::findByAid)
+                .doNothing();
     }
 }

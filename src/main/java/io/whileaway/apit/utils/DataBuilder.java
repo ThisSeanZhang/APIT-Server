@@ -41,4 +41,8 @@ public class DataBuilder<A, B, C> {
     public Result<C> convert(Function<B, C> convert) {
         return ResultUtil.success(ControllerEnum.SUCCESS, convert.apply(this.target));
     }
+
+    public Result<B> doNothing() {
+        return ResultUtil.success(ControllerEnum.SUCCESS, this.target);
+    }
 }
