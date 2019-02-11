@@ -11,4 +11,6 @@ public interface APIService {
     Result<List<Node>> findByBelongFolder(Long belongFolder);
 
     Result<API> findById(Long aid);
+
+    Result<API> createAPI(API api);
 }

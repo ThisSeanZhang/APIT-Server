@@ -1,45 +1,45 @@
-package io.whileaway.apit.api.entity;
+package io.whileaway.apit.api.request;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import io.whileaway.apit.api.entity.API;
 
-@Entity
-public class API {
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long aid;
+public class CreateAPI {
+
+    @NotNull(message = "需要传入该参数")
+    @NotBlank(message = "不能为空白")
     private String apiName;
     private String method;
     private String bewrite;
+    @NotNull(message = "需要传入该参数")
+    @NotBlank(message = "不能为空白")
     private String url;
     private String parameters;
     private String headers;
     private String body;
+    @NotNull(message="需要指定所属人")
     private Long apiOwner;
+    @NotNull(message="需要指定所属的文件夹")
     private Long belongFolder;
+    @NotNull(message="需要指定所属的项目")
     private Long belongProject;
 
-    public API(String apiName, String method, String url, Long apiOwner, Long belongFolder, Long belongProject) {
+    public API covertToAPI () {
+        API api = new API(this.apiName, this.method, this.url, this.apiOwner, this.belongFolder, this.belongProject);
+        api.setBewrite(this.bewrite);
+        api.setParameters(this.parameters);
+        api.setHeaders(this.headers);
+        api.setBody(this.body);
+        return api;
+    }
+
+    public String getApiName() {
+        return apiName;
+    }
+
+    public void setApiName(String apiName) {
         this.apiName = apiName;
-        this.method = method;
-        this.url = url;
-        this.apiOwner = apiOwner;
-        this.belongFolder = belongFolder;
-        this.belongProject = belongProject;
-    }
-
-    public API() {
-    }
-
-    public Long getAid() {
-        return aid;
-    }
-
-    public void setAid(Long aid) {
-        this.aid = aid;
     }
 
     public String getMethod() {
@@ -112,13 +112,5 @@ public class API {
 
     public void setBelongProject(Long belongProject) {
         this.belongProject = belongProject;
-    }
-
-    public String getApiName() {
-        return apiName;
-    }
-
-    public void setApiName(String apiName) {
-        this.apiName = apiName;
     }
 }

@@ -5,7 +5,9 @@ import io.whileaway.apit.api.repository.APIRepository;
 import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.api.specs.APISpec;
 import io.whileaway.apit.base.Result;
+import io.whileaway.apit.base.ResultUtil;
 import io.whileaway.apit.base.Spec;
+import io.whileaway.apit.base.enums.ControllerEnum;
 import io.whileaway.apit.utils.DataBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,5 +39,10 @@ public class APIServiceImpl implements APIService {
                 .inspectParam(Objects::isNull)
                 .findInDB(apiRepository::findByAid)
                 .doNothing();
+    }
+
+    @Override
+    public Result<API> createAPI(API api) {
+        return ResultUtil.success(ControllerEnum.SUCCESS, apiRepository.save(api));
     }
 }

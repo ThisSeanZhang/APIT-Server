@@ -13,6 +13,7 @@ import io.whileaway.apit.base.enums.ControllerEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,9 +63,20 @@ public class FolderServiceImpl implements FolderService {
 
     @Override
     public Result<List<Node>> folderContent(FilterFolder filterFolder) {
-        Result<List<Node>> listResult = filterFolders(filterFolder);
-        Result<List<Node>> byBelongFolder = apiService.findByBelongFolder(filterFolder.getParentId());
-        listResult.getData().addAll(byBelongFolder.getData());
-        return ResultUtil.success(ControllerEnum.SUCCESS, listResult.getData());
+        List<Node> nodes = new ArrayList<>();
+        List<Node> listResult = new ArrayList<>();
+        List<Node> byBelongFolder = new ArrayList<>();
+
+        try{ listResult = filterFolders(filterFolder).getData(); }
+        catch (CommonException e) { System.out.println(e); }
+        finally { if ( !listResult.isEmpty() ) nodes.addAll(listResult); }
+
+        try{ byBelongFolder = apiService.findByBelongFolder(filterFolder.getParentId()).getData(); }
+        catch (CommonException e) { System.out.println(e); }
+        finally { if ( !byBelongFolder.isEmpty() ) nodes.addAll(byBelongFolder); }
+
+        if (nodes.isEmpty())
+            throw new CommonException(ControllerEnum.NOT_FOUND);
+        return ResultUtil.success(ControllerEnum.SUCCESS, nodes);
     }
 }
