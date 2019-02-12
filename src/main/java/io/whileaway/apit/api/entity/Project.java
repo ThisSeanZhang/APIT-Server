@@ -14,6 +14,13 @@ public class Project {
     private String projectName;
     private Long projectOwner;
 
+    public Project() { }
+
+    public Project(String projectName, Long projectOwner) {
+        this.projectName = projectName;
+        this.projectOwner = projectOwner;
+    }
+
     public Long getPid() {
         return pid;
     }

@@ -4,6 +4,8 @@ import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.repository.ProjectRepository;
 import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.base.Result;
+import io.whileaway.apit.base.ResultUtil;
+import io.whileaway.apit.base.enums.ControllerEnum;
 import io.whileaway.apit.utils.DatasBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +24,11 @@ public class ProjectServiceImpl implements ProjectService {
     public ProjectServiceImpl(ProjectRepository projectRepository, FolderService folderService) {
         this.projectRepository = projectRepository;
         this.folderService = folderService;
+    }
+
+    @Override
+    public Result<Project> createProject(Project project) {
+        return ResultUtil.success(ControllerEnum.SUCCESS, projectRepository.save(project));
     }
 
     @Override

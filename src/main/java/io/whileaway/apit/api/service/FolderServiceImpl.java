@@ -30,6 +30,11 @@ public class FolderServiceImpl implements FolderService {
     }
 
     @Override
+    public Result<Folder> createFolder(Folder folder) {
+        return ResultUtil.success(ControllerEnum.SUCCESS, folderRepository.save(folder));
+    }
+
+    @Override
     public Result<List<Node>> getFoldersNodeByProjectId(Long pid) {
         if (Objects.isNull(pid)) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
         return new Spec<Folder, Node>()

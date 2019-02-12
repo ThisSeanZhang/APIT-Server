@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface ProjectService {
 
+    Result<Project> createProject (Project project);
+
     Result<List<Project>> getProjectsByOwnerId (Long projectOwner);
 
-    Result<List<Node>> firstLayerContent(Long belongProject, Long folderOwnerId);
+    Result<List<Node>> firstLayerContent (Long belongProject, Long folderOwnerId);
 }

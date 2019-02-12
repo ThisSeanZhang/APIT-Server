@@ -2,7 +2,10 @@ package io.whileaway.apit.account.service;
 
 import io.whileaway.apit.account.entity.Developer;
 import io.whileaway.apit.account.repository.DeveloperRepository;
-import io.whileaway.apit.account.service.DeveloperService;
+import io.whileaway.apit.api.entity.Folder;
+import io.whileaway.apit.api.entity.Project;
+import io.whileaway.apit.api.service.FolderService;
+import io.whileaway.apit.api.service.ProjectService;
 import io.whileaway.apit.base.*;
 import io.whileaway.apit.base.enums.ControllerEnum;
 import io.whileaway.apit.base.enums.ResponseEnum;
@@ -19,15 +22,28 @@ import java.util.function.Predicate;
 @Service
 public class DeveloperServiceImpl implements DeveloperService {
 
+    private final DeveloperRepository developerRepository;
+    private final FolderService folderService;
+    private final ProjectService projectService;
+
     @Autowired
-    private DeveloperRepository developerRepository;
+    public DeveloperServiceImpl(DeveloperRepository developerRepository, FolderService folderService, ProjectService projectService) {
+        this.developerRepository = developerRepository;
+        this.folderService = folderService;
+        this.projectService = projectService;
+    }
 
     @Override
     public Result<Developer> createDeveloper(Developer developer) {
         if (StringUtils.anyIsEmptyOrBlank(developer.getDeveloperName(), developer.getDeveloperPass(), developer.getEmail())) {
             throw new CommonException(ControllerEnum.PARAMETER_ERROR);
         }
-        return ResultUtil.success(ControllerEnum.SUCCESS, developerRepository.save(developer));
+        Developer data = developerRepository.save(developer);
+        Project project = projectService.createProject(new Project("默认项目", data.getDeveloperId())).getData();
+        Folder folder = folderService.createFolder(new Folder("默认文件夹", data.getDeveloperId(), project.getPid())).getData();
+        data.setDefaultProject(project.getPid());
+        data.setDefaultFolder(folder.getFid());
+        return ResultUtil.success(ControllerEnum.SUCCESS, developerRepository.save(data));
     }
 
     @Override

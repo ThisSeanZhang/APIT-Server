@@ -14,6 +14,8 @@ public class Developer {
     private String developerPass;
     @Column(length = 50, nullable = false)
     private String email;
+    private Long defaultFolder;
+    private Long defaultProject;
 
     public Developer() {
     }
@@ -54,5 +56,21 @@ public class Developer {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public Long getDefaultFolder() {
+        return defaultFolder;
+    }
+
+    public void setDefaultFolder(Long defaultFolder) {
+        this.defaultFolder = defaultFolder;
+    }
+
+    public Long getDefaultProject() {
+        return defaultProject;
+    }
+
+    public void setDefaultProject(Long defaultProject) {
+        this.defaultProject = defaultProject;
     }
 }

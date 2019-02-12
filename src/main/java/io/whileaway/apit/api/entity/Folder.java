@@ -16,6 +16,20 @@ public class Folder {
     private Long folderOwnerId;
     private Long belongProject;
 
+    public Folder() { }
+    public Folder(String folderName, Long folderOwnerId, Long belongProject) {
+        this.folderName = folderName;
+        this.folderOwnerId = folderOwnerId;
+        this.belongProject = belongProject;
+    }
+
+    public Folder(String folderName, Long parentId, Long folderOwnerId, Long belongProject) {
+        this.folderName = folderName;
+        this.parentId = parentId;
+        this.folderOwnerId = folderOwnerId;
+        this.belongProject = belongProject;
+    }
+
     public Long getFid() {
         return fid;
     }

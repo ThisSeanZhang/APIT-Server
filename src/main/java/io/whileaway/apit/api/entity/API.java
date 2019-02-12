@@ -1,9 +1,6 @@
 package io.whileaway.apit.api.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 public class API {
@@ -15,8 +12,11 @@ public class API {
     private String method;
     private String bewrite;
     private String url;
+    @Column(length = 1000)
     private String parameters;
+    @Column(length = 1000)
     private String headers;
+    @Column(length = 1000)
     private String body;
     private Long apiOwner;
     private Long belongFolder;
