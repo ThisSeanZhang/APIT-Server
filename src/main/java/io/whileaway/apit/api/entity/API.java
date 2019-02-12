@@ -12,11 +12,11 @@ public class API {
     private String method;
     private String bewrite;
     private String url;
-    @Column(length = 1000)
+    @Column(columnDefinition="text")
     private String parameters;
-    @Column(length = 1000)
+    @Column(columnDefinition="text")
     private String headers;
-    @Column(length = 1000)
+    @Column(columnDefinition="text")
     private String body;
     private Long apiOwner;
     private Long belongFolder;
