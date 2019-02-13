@@ -9,7 +9,7 @@ import java.util.List;
 public interface NodeService {
     Result<List<Node>> firstLayerNodes(Long belongProject, Long ownerId);
 
-    Result<List<Node>> folderContent(FilterNode filterNode);
+    Result<List<Node>> nodeContent(FilterNode filterNode);
 
     Node createNode(Node node);
 }

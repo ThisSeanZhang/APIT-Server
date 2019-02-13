@@ -3,8 +3,10 @@ package io.whileaway.apit.account.service;
 import io.whileaway.apit.account.entity.Developer;
 import io.whileaway.apit.account.repository.DeveloperRepository;
 import io.whileaway.apit.api.entity.Folder;
+import io.whileaway.apit.api.entity.Node;
 import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.service.FolderService;
+import io.whileaway.apit.api.service.NodeService;
 import io.whileaway.apit.api.service.ProjectService;
 import io.whileaway.apit.base.*;
 import io.whileaway.apit.base.enums.ControllerEnum;
@@ -25,12 +27,14 @@ public class DeveloperServiceImpl implements DeveloperService {
     private final DeveloperRepository developerRepository;
     private final FolderService folderService;
     private final ProjectService projectService;
+    private final NodeService nodeService;
 
     @Autowired
-    public DeveloperServiceImpl(DeveloperRepository developerRepository, FolderService folderService, ProjectService projectService) {
+    public DeveloperServiceImpl(DeveloperRepository developerRepository, FolderService folderService, ProjectService projectService, NodeService nodeService) {
         this.developerRepository = developerRepository;
         this.folderService = folderService;
         this.projectService = projectService;
+        this.nodeService = nodeService;
     }
 
     @Override
@@ -41,8 +45,10 @@ public class DeveloperServiceImpl implements DeveloperService {
         Developer data = developerRepository.save(developer);
         Project project = projectService.createProject(new Project("默认项目", data.getDeveloperId())).getData();
         Folder folder = folderService.createFolder(new Folder("默认文件夹", data.getDeveloperId(), project.getPid())).getData();
+        Node node = nodeService.createNode(new Node (folder));
         data.setDefaultProject(project.getPid());
         data.setDefaultFolder(folder.getFid());
+        data.setDefaultNode(node.getNid());
         return ResultUtil.success(ControllerEnum.SUCCESS, developerRepository.save(data));
     }
 

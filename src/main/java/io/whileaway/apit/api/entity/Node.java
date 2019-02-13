@@ -40,6 +40,16 @@ public class Node {
         this.belongProject = api.getBelongProject();
     }
 
+    public Node(String label, Boolean leaf, Integer type, Long contain, Long parentId, Long ownerId, Long belongProject) {
+        this.label = label;
+        this.leaf = leaf;
+        this.type = type;
+        this.contain = contain;
+        this.parentId = parentId;
+        this.ownerId = ownerId;
+        this.belongProject = belongProject;
+    }
+
     public Long getParentId() {
         return parentId;
     }

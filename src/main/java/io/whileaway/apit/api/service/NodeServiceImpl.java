@@ -33,7 +33,7 @@ public class NodeServiceImpl implements NodeService {
     }
 
     @Override
-    public Result<List<Node>> folderContent(FilterNode filterNode) {
+    public Result<List<Node>> nodeContent(FilterNode filterNode) {
         return new Spec<Node, Node>()
                 .appendCondition(NodeSpec.belongProject(filterNode::getBelongProject))
                 .appendCondition(NodeSpec.ownerId(filterNode::getOwnerId))

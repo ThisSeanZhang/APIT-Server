@@ -34,6 +34,6 @@ public class NodeController {
 //
     @GetMapping("/content")
     public Result<List<Node>> filterNodes (FilterNode filterNode) {
-        return nodeService.folderContent(filterNode);
+        return nodeService.nodeContent(filterNode);
     }
 }
