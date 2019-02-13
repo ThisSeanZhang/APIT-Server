@@ -2,7 +2,7 @@ package io.whileaway.apit.api.service;
 
 import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.repository.ProjectRepository;
-import io.whileaway.apit.api.response.Node;
+import io.whileaway.apit.api.entity.Node;
 import io.whileaway.apit.base.Result;
 import io.whileaway.apit.base.ResultUtil;
 import io.whileaway.apit.base.enums.ControllerEnum;
@@ -18,12 +18,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
 
-    private final FolderService folderService;
+    private final NodeService nodeService;
 
     @Autowired
-    public ProjectServiceImpl(ProjectRepository projectRepository, FolderService folderService) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, NodeService nodeService) {
         this.projectRepository = projectRepository;
-        this.folderService = folderService;
+        this.nodeService = nodeService;
     }
 
     @Override
@@ -40,8 +40,8 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Result<List<Node>> firstLayerContent(Long belongProject, Long folderOwnerId) {
-        return folderService.firstLayerFolders(belongProject, folderOwnerId);
+    public Result<List<Node>> firstLayerContent(Long belongProject, Long ownerId) {
+        return nodeService.firstLayerNodes(belongProject, ownerId);
     }
 
 

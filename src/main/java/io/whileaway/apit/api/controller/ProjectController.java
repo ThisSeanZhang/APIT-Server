@@ -1,7 +1,7 @@
 package io.whileaway.apit.api.controller;
 
 import io.whileaway.apit.api.entity.Project;
-import io.whileaway.apit.api.response.Node;
+import io.whileaway.apit.api.entity.Node;
 import io.whileaway.apit.api.service.ProjectService;
 import io.whileaway.apit.base.CommonException;
 import io.whileaway.apit.base.Result;
@@ -27,10 +27,10 @@ public class ProjectController {
         return projectService.getProjectsByOwnerId(id);
     }
 
-    @GetMapping("/content/first-layer")
-    public Result<List<Node>> getFirstLayerContent (@RequestParam("belongProject") Long belongProject, @RequestParam("folderOwnerId") Long folderOwnerId) {
-        if (belongProject == null || folderOwnerId == null) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
-        return projectService.firstLayerContent(belongProject, folderOwnerId);
+    @GetMapping("/{projectId}/content/first-layer")
+    public Result<List<Node>> getFirstLayerContent (@PathVariable("projectId") Long belongProject, @RequestParam("ownerId") Long ownerId) {
+        if (belongProject == null || ownerId == null) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
+        return projectService.firstLayerContent(belongProject, ownerId);
     }
 
 }

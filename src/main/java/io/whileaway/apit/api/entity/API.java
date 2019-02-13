@@ -19,15 +19,15 @@ public class API {
     @Column(columnDefinition="text")
     private String body;
     private Long apiOwner;
-    private Long belongFolder;
+    private Long belongNode;
     private Long belongProject;
 
-    public API(String apiName, String method, String url, Long apiOwner, Long belongFolder, Long belongProject) {
+    public API(String apiName, String method, String url, Long apiOwner, Long belongNode, Long belongProject) {
         this.apiName = apiName;
         this.method = method;
         this.url = url;
         this.apiOwner = apiOwner;
-        this.belongFolder = belongFolder;
+        this.belongNode = belongNode;
         this.belongProject = belongProject;
     }
 
@@ -98,12 +98,12 @@ public class API {
         this.apiOwner = apiOwner;
     }
 
-    public Long getBelongFolder() {
-        return belongFolder;
+    public Long getBelongNode() {
+        return belongNode;
     }
 
-    public void setBelongFolder(Long belongFolder) {
-        this.belongFolder = belongFolder;
+    public void setBelongNode(Long belongNode) {
+        this.belongNode = belongNode;
     }
 
     public Long getBelongProject() {
