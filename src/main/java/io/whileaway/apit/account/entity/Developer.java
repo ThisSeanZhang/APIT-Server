@@ -73,4 +73,16 @@ public class Developer {
     public void setDefaultProject(Long defaultProject) {
         this.defaultProject = defaultProject;
     }
+
+    @Override
+    public String toString() {
+        return "Developer{" +
+                "developerId=" + developerId +
+                ", developerName='" + developerName + '\'' +
+                ", developerPass='" + developerPass + '\'' +
+                ", email='" + email + '\'' +
+                ", defaultFolder=" + defaultFolder +
+                ", defaultProject=" + defaultProject +
+                '}';
+    }
 }
