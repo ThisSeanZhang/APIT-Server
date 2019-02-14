@@ -3,7 +3,7 @@ package io.whileaway.apit.api.service;
 import io.whileaway.apit.api.entity.Folder;
 import io.whileaway.apit.api.repository.FolderRepository;
 import io.whileaway.apit.api.request.FilterFolder;
-import io.whileaway.apit.api.entity.Node;
+import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.api.specs.FolderSpec;
 import io.whileaway.apit.base.CommonException;
 import io.whileaway.apit.base.Result;

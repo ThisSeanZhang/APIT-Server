@@ -1,7 +1,7 @@
 package io.whileaway.apit.api.controller;
 
 import io.whileaway.apit.api.entity.Project;
-import io.whileaway.apit.api.entity.Node;
+import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.api.service.ProjectService;
 import io.whileaway.apit.base.CommonException;
 import io.whileaway.apit.base.Result;

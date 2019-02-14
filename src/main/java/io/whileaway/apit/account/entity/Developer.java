@@ -16,7 +16,6 @@ public class Developer {
     private String email;
     private Long defaultFolder;
     private Long defaultProject;
-    private Long defaultNode;
 
     public Developer() {
     }
@@ -73,13 +72,5 @@ public class Developer {
 
     public void setDefaultProject(Long defaultProject) {
         this.defaultProject = defaultProject;
-    }
-
-    public Long getDefaultNode() {
-        return defaultNode;
-    }
-
-    public void setDefaultNode(Long defaultNode) {
-        this.defaultNode = defaultNode;
     }
 }

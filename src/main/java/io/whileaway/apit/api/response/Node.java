@@ -1,16 +1,11 @@
-package io.whileaway.apit.api.entity;
+package io.whileaway.apit.api.response;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import io.whileaway.apit.api.entity.API;
+import io.whileaway.apit.api.entity.Folder;
 
-@Entity
 public class Node {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long nid;
+    private String nid;
     private String label;
     private Boolean leaf;
     private Integer type;
@@ -19,8 +14,8 @@ public class Node {
     private Long ownerId;
     private Long belongProject;
 
-    public Node () {}
     public Node(Folder folder) {
+        this.nid = "folder" + folder.getFid().toString();
         this.label = folder.getFolderName();
         this.leaf = false;
         this.type = 0;
@@ -31,11 +26,12 @@ public class Node {
     }
 
     public Node(API api) {
+        this.nid = "api" + api.getAid().toString();
         this.label = api.getApiName();
         this.leaf = true;
         this.type = 1;
         this.contain = api.getAid();
-        this.parentId = api.getBelongNode();
+        this.parentId = api.getBelongFolder();
         this.ownerId = api.getApiOwner();
         this.belongProject = api.getBelongProject();
     }
@@ -90,11 +86,11 @@ public class Node {
         this.contain = contain;
     }
 
-    public Long getNid() {
+    public String getNid() {
         return nid;
     }
 
-    public void setNid(Long nid) {
+    public void setNid(String nid) {
         this.nid = nid;
     }
 

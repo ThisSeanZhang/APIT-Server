@@ -32,4 +32,10 @@ public class APIController {
         ResultUtil.inspect(bindingResult);
         return apiService.createAPI(createAPI.covertToAPI());
     }
+
+    @PutMapping("/{aid}")
+    public Result<API> createAPI(@PathVariable("aid") Long aid, @Valid @RequestBody API updateApi) {
+        updateApi.setAid(aid);
+        return apiService.updateApi(updateApi);
+    }
 }
