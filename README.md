@@ -31,7 +31,32 @@ spring:
 ```$xslt
 $ java -jar -Dspring.profiles.active=prod ./对应的jar文件
 ```
+> 或者使用Docker
 
+```dockerfile
+#基础镜像使用 openjdk:11.0.2-jdk
+FROM openjdk:11.0.2-jdk
+
+#作者
+MAINTAINER ThisSeanZhang <thisseanzhang@gmail.com>
+
+#将运行文件拷贝至root
+ENV RUN_DIR /root
+WORKDIR /root
+
+#定义初始化sql文件
+ENV SERVER_JAR APIT-Server-v0.1-alpha.jar
+ENV SERVER_CONF application-prod.yml
+
+#拷贝文件
+COPY ./$SERVER_JAR $RUN_DIR/
+COPY ./$SERVER_CONF $RUN_DIR/
+
+EXPOSE 80
+
+#运行
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "./APIT-Server-v0.1-alpha.jar"]
+```
 #### 完(后续再添加吧)
 
 ### 技术
