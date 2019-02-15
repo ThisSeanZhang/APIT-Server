@@ -10,9 +10,9 @@
 	</parent>
 	<groupId>io.whileaway</groupId>
 	<artifactId>APIT-Server</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>v0.1-alpha</version>
 	<name>APIT-Server</name>
-	<description>API Test</description>
+	<description>API Test Server</description>
 
 	<properties>
 		<java.version>11</java.version>
