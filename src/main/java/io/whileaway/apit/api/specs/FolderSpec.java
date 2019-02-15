@@ -7,7 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-public class FolderSpec<A, B> {
+public class FolderSpec {
 
     public static<A> Specification<A> folderName(Supplier<String> supplier) {
         return Spec.equal("folderName", StringUtils::isEmptyOrBlank, supplier);

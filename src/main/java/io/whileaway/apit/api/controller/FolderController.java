@@ -19,18 +19,7 @@ public class FolderController {
     public FolderController(FolderService folderService) {
         this.folderService = folderService;
     }
-//
-//    @GetMapping("/belong-project/{id}")
-//    public Result<List<Node>> getFoldersNodeByProjectId (@PathVariable("id") Long pid) {
-//        return folderService.getFoldersNodeByProjectId(pid);
-//    }
-//
-//    @GetMapping("/first-layer")
-//    public Result<List<Node>> firstLayerFolders (@RequestParam("belongProject") Long belongProject, @RequestParam("folderOwnerId") Long folderOwnerId) {
-//        if (belongProject == null || folderOwnerId == null) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
-//        return folderService.firstLayerFolders(belongProject, folderOwnerId);
-//    }
-//
+
     @GetMapping("/{folderId}/content")
     public Result<List<Node>> filterFolders (@PathVariable("folderId") Long folderId, FilterFolder filterFolder) {
         filterFolder.setParentId(folderId);
