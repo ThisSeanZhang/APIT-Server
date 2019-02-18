@@ -60,7 +60,7 @@ public class FolderServiceImpl implements FolderService {
         if (Objects.isNull(belongProject) || Objects.isNull(folderOwnerId) ) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
         return new Spec<Folder, Node>()
                 .appendCondition(FolderSpec.belongProject(()-> belongProject))
-                .appendCondition(FolderSpec.folderOwnerId(()->folderOwnerId))
+//                .appendCondition(FolderSpec.folderOwnerId(()->folderOwnerId))
                 .appendCondition(FolderSpec.folderParentIsNull())
                 .findInDB(folderRepository::findAll)
                 .convert(Node::new);
