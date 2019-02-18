@@ -16,4 +16,8 @@ public interface ProjectService {
     Result<List<Node>> firstLayerContent (Long belongProject, Long ownerId);
 
     void inspectPermission(HttpServletRequest request, Long projectId);
+
+    void checkOvert(Long projectId);
+
+    Project getProject(Long pid);
 }

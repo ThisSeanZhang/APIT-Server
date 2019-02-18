@@ -1,5 +1,7 @@
 //package io.whileaway.apit.api.interceptor;
 //
+//import io.whileaway.apit.api.service.APIService;
+//import io.whileaway.apit.api.service.FolderService;
 //import io.whileaway.apit.api.service.ProjectService;
 //import io.whileaway.apit.base.CommonException;
 //import io.whileaway.apit.base.enums.ControllerEnum;
@@ -16,16 +18,25 @@
 //@Component
 //public class ProjectInterceptor implements HandlerInterceptor {
 //
+//    private final ProjectService projectService;
+//    private final FolderService folderService;
+//    private final APIService apiService;
+//
 //    @Autowired
-//    private ProjectService projectService;
+//    public ProjectInterceptor(ProjectService projectService, FolderService folderService, APIService apiService) {
+//        this.projectService = projectService;
+//        this.folderService = folderService;
+//        this.apiService = apiService;
+//    }
 //
 //    @Override
 //    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 //        Map pathVariables = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-//        String value = (String) pathVariables.get("code");
+////        String value = (String) pathVariables.get("code");
 ////        projectService.findByProjectId()
-//        throw new CommonException(ControllerEnum.SERVER_ERROR);
+////        throw new CommonException(ControllerEnum.SERVER_ERROR);
 ////        return true;
+//
 //    }
 //
 //    @Override

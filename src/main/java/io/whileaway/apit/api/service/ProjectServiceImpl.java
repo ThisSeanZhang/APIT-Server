@@ -60,4 +60,19 @@ public class ProjectServiceImpl implements ProjectService {
         if (Stream.of(project.get().getWhoJoins().split(",")).noneMatch(id -> developer.getDeveloperId().equals(Long.valueOf(id))))
             throw new CommonException(ControllerEnum.NOT_ALLOW);
     }
+
+    @Override
+    public void checkOvert(Long projectId) {
+        if ( getProject(projectId).getOvert() ) {
+            return ;
+        }
+        throw new CommonException(ControllerEnum.NOT_ALLOW);
+    }
+
+    @Override
+    public Project getProject(Long pid) {
+        Optional<Project> project = projectRepository.findById(pid);
+        if (project.isEmpty()) throw new CommonException(ControllerEnum.NOT_FOUND);
+        return project.get();
+    }
 }

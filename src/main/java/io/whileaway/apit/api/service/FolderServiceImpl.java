@@ -13,20 +13,24 @@ import io.whileaway.apit.base.enums.ControllerEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class FolderServiceImpl implements FolderService {
 
     private final FolderRepository folderRepository;
     private final APIService apiService;
+    private final ProjectService projectService;
 
     @Autowired
-    public FolderServiceImpl(FolderRepository folderRepository, APIService apiService) {
+    public FolderServiceImpl(FolderRepository folderRepository, APIService apiService, ProjectService projectService) {
         this.folderRepository = folderRepository;
         this.apiService = apiService;
+        this.projectService = projectService;
     }
 
     @Override
@@ -83,5 +87,22 @@ public class FolderServiceImpl implements FolderService {
         if (nodes.isEmpty())
             throw new CommonException(ControllerEnum.NOT_FOUND);
         return ResultUtil.success(ControllerEnum.SUCCESS, nodes);
+    }
+
+    @Override
+    public void inspectPermission(HttpServletRequest request, Long folderId) {
+        Folder folder = getFolder(folderId);
+        projectService.inspectPermission(request, folder.getBelongProject());
+    }
+
+    @Override
+    public void checkProjectOvert(Long id) {
+        projectService.checkOvert(getFolder(id).getBelongProject());
+    }
+
+    private Folder getFolder(Long id) {
+        Optional<Folder> folder = folderRepository.findById(id);
+        if (folder.isEmpty()) throw new CommonException(ControllerEnum.NOT_FOUND);
+        return folder.get();
     }
 }

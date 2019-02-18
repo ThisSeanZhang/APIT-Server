@@ -44,4 +44,10 @@ public class ProjectController {
         ResultUtil.inspect(bindingResult);
         return projectService.createProject(createProject.convertToProject());
     }
+
+    @GetMapping("/{id}")
+    public Result<Project> findProjectById (HttpServletRequest request, @PathVariable("id") Long pid) {
+        projectService.inspectPermission(request, pid);
+        return ResultUtil.success(ControllerEnum.SUCCESS, projectService.getProject(pid));
+    }
 }
