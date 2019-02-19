@@ -9,7 +9,6 @@ import io.whileaway.apit.base.Result;
 import io.whileaway.apit.base.ResultUtil;
 import io.whileaway.apit.base.enums.ControllerEnum;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,15 +27,16 @@ public class ProjectController {
     }
 
     @GetMapping("/owner/{id}")
-    public Result<List<Project>> getProjectsByOwnerId (@PathVariable("id") Long id) {
+    public Result<List<Project>> getProjectsByOwnerId (HttpServletRequest request, @PathVariable("id") Long id) {
+        projectService.inspectPermission(request, id, projectService::checkAllowView);
         return projectService.getProjectsByOwnerId(id);
     }
 
     @GetMapping("/{projectId}/content/first-layer")
-    public Result<List<Node>> getFirstLayerContent (HttpServletRequest request, @PathVariable("projectId") Long belongProject, @RequestParam("ownerId") Long ownerId) {
-        if (belongProject == null || ownerId == null) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
-        projectService.inspectPermission(request, belongProject);
-        return projectService.firstLayerContent(belongProject, ownerId);
+    public Result<List<Node>> getFirstLayerContent (HttpServletRequest request, @PathVariable("projectId") Long belongProject) {
+        if (belongProject == null) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
+        projectService.inspectPermission(request, belongProject, projectService::checkAllowView);
+        return projectService.firstLayerContent(belongProject);
     }
 
     @PostMapping
@@ -47,7 +47,7 @@ public class ProjectController {
 
     @GetMapping("/{id}")
     public Result<Project> findProjectById (HttpServletRequest request, @PathVariable("id") Long pid) {
-        projectService.inspectPermission(request, pid);
+        projectService.inspectPermission(request, pid, projectService::checkAllowView);
         return ResultUtil.success(ControllerEnum.SUCCESS, projectService.getProject(pid));
     }
 }

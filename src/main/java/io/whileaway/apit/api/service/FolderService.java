@@ -16,7 +16,7 @@ public interface FolderService {
 
     Result<List<Node>> filterFolders(FilterFolder filterFolder);
 
-    Result<List<Node>> firstLayerFolders(Long belongProject, Long folderOwnerId);
+    Result<List<Node>> firstLayerFolders(Long belongProject);
 
     Result<List<Node>> folderContent(FilterFolder filterFolder);
 

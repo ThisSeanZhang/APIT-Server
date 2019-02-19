@@ -24,13 +24,13 @@ public class FolderServiceImpl implements FolderService {
 
     private final FolderRepository folderRepository;
     private final APIService apiService;
-    private final ProjectService projectService;
+//    private final ProjectService projectService;
 
     @Autowired
-    public FolderServiceImpl(FolderRepository folderRepository, APIService apiService, ProjectService projectService) {
+    public FolderServiceImpl(FolderRepository folderRepository, APIService apiService) {
         this.folderRepository = folderRepository;
         this.apiService = apiService;
-        this.projectService = projectService;
+//        this.projectService = projectService;
     }
 
     @Override
@@ -60,11 +60,10 @@ public class FolderServiceImpl implements FolderService {
     }
 
     @Override
-    public Result<List<Node>> firstLayerFolders(Long belongProject, Long folderOwnerId) {
-        if (Objects.isNull(belongProject) || Objects.isNull(folderOwnerId) ) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
+    public Result<List<Node>> firstLayerFolders(Long belongProject) {
+        if (Objects.isNull(belongProject) ) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
         return new Spec<Folder, Node>()
                 .appendCondition(FolderSpec.belongProject(()-> belongProject))
-//                .appendCondition(FolderSpec.folderOwnerId(()->folderOwnerId))
                 .appendCondition(FolderSpec.folderParentIsNull())
                 .findInDB(folderRepository::findAll)
                 .convert(Node::new);
@@ -91,13 +90,13 @@ public class FolderServiceImpl implements FolderService {
 
     @Override
     public void inspectPermission(HttpServletRequest request, Long folderId) {
-        Folder folder = getFolder(folderId);
-        projectService.inspectPermission(request, folder.getBelongProject());
+//        Folder folder = getFolder(folderId);
+//        projectService.inspectPermission(request, folder.getBelongProject());
     }
 
     @Override
     public void checkProjectOvert(Long id) {
-        projectService.checkOvert(getFolder(id).getBelongProject());
+//        projectService.checkOvert(getFolder(id).getBelongProject());
     }
 
     private Folder getFolder(Long id) {

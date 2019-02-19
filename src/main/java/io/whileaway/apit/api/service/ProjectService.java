@@ -6,6 +6,7 @@ import io.whileaway.apit.base.Result;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.function.BiFunction;
 
 public interface ProjectService {
 
@@ -13,11 +14,15 @@ public interface ProjectService {
 
     Result<List<Project>> getProjectsByOwnerId (Long projectOwner);
 
-    Result<List<Node>> firstLayerContent (Long belongProject, Long ownerId);
+    Result<List<Node>> firstLayerContent (Long belongProject);
 
-    void inspectPermission(HttpServletRequest request, Long projectId);
+    boolean inspectPermission(HttpServletRequest request, Long projectId, BiFunction<Project, Long, Boolean> check);
 
-    void checkOvert(Long projectId);
+    boolean checkAllowDelete(Project project, Long id);
+
+    boolean checkAllowEdit(Project project, Long id);
+
+    boolean checkAllowView(Project project, Long id);
 
     Project getProject(Long pid);
 }

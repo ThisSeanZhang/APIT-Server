@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.stream.Stream;
 
 @Service
@@ -44,29 +45,39 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Result<List<Node>> firstLayerContent(Long belongProject, Long ownerId) {
-        return folderService.firstLayerFolders(belongProject, ownerId);
+    public Result<List<Node>> firstLayerContent(Long belongProject) {
+        return folderService.firstLayerFolders(belongProject);
     }
 
     @Override
-    public void inspectPermission(HttpServletRequest request, Long projectId) {
-        Optional<Project> project = projectRepository.findById(projectId);
-        if (project.isEmpty()) throw new CommonException(ControllerEnum.NOT_FOUND);
-
-        if ( request.getSession() == null  ) throw new CommonException(ControllerEnum.SERVER_ERROR);
-        Developer developer = (Developer) request.getSession().getAttribute("currentDeveloper");
-        if (developer == null) throw new CommonException(ControllerEnum.NOT_ALLOW);
-
-        if (Stream.of(project.get().getWhoJoins().split(",")).noneMatch(id -> developer.getDeveloperId().equals(Long.valueOf(id))))
-            throw new CommonException(ControllerEnum.NOT_ALLOW);
-    }
-
-    @Override
-    public void checkOvert(Long projectId) {
-        if ( getProject(projectId).getOvert() ) {
-            return ;
+    public boolean inspectPermission(HttpServletRequest request, Long projectId, BiFunction<Project, Long, Boolean> check) {
+        Optional<Developer> developer = Optional.ofNullable((Developer) request.getSession().getAttribute("currentDeveloper"));
+        Project project = getProject(projectId);
+        Long developerId = developer.map(Developer::getDeveloperId).get();
+        if( check.apply(project, developerId) ) {
+            return true;
         }
-        throw new CommonException(ControllerEnum.NOT_ALLOW);
+        else if (project.getOvert()) {
+            throw new CommonException(ControllerEnum.NOT_ALLOW);
+        }else{
+            throw new CommonException(ControllerEnum.NOT_FOUND);
+        }
+    }
+
+    @Override
+    public boolean checkAllowDelete(Project project, Long developerId) {
+        return Objects.equals(project.getProjectOwner(), developerId);
+    }
+
+    @Override
+    public boolean checkAllowEdit(Project project, Long developerId) {
+        String patten = developerId + ",.*|.*,"+ developerId +",.*|.*," + developerId ;
+        return Objects.nonNull(developerId) && project.getWhoJoins().matches(patten);
+    }
+
+    @Override
+    public boolean checkAllowView(Project project, Long developerId) {
+        return project.getOvert() || checkAllowEdit(project, developerId);
     }
 
     @Override

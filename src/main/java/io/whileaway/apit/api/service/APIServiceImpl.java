@@ -23,12 +23,12 @@ import java.util.Optional;
 public class APIServiceImpl implements APIService {
 
     private final APIRepository apiRepository;
-    private final ProjectService projectService;
+//    private final ProjectService projectService;
 
     @Autowired
-    public APIServiceImpl(APIRepository apiRepository, ProjectService projectService) {
+    public APIServiceImpl(APIRepository apiRepository) {
         this.apiRepository = apiRepository;
-        this.projectService = projectService;
+//        this.projectService = projectService;
     }
 
     @Override
@@ -62,19 +62,17 @@ public class APIServiceImpl implements APIService {
 
     @Override
     public API getById(Long aid) {
-        Optional<API> api = apiRepository.findByAid(aid);
-        if (api.isEmpty()) throw new CommonException(ControllerEnum.NOT_FOUND);
-        return api.get();
+        return apiRepository.findByAid(aid).orElseThrow(() -> new CommonException(ControllerEnum.NOT_FOUND));
     }
 
     @Override
     public void inspectPermission(HttpServletRequest request, Long aid) {
         API api = getById(aid);
-        projectService.inspectPermission(request, api.getBelongProject());
+//        projectService.inspectPermission(request, api.getBelongProject());
     }
 
     @Override
     public void checkProjectOvert(Long id) {
-        projectService.checkOvert(getById(id).getBelongProject());
+//        projectService.checkOvert(getById(id).getBelongProject());
     }
 }
