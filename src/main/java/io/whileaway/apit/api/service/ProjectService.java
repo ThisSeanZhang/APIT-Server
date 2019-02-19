@@ -20,7 +20,7 @@ public interface ProjectService {
 
     boolean checkAllowDelete(Project project, Long id);
 
-    boolean checkAllowEdit(Project project, Long id);
+    boolean checkAllowModify(Project project, Long id);
 
     boolean checkAllowView(Project project, Long id);
 

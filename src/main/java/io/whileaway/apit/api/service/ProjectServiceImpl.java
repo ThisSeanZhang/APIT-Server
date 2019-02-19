@@ -40,7 +40,7 @@ public class ProjectServiceImpl implements ProjectService {
     public Result<List<Project>> getProjectsByOwnerId(Long projectOwner) {
         return new DatasBuilder<Long, Project, Project>(projectOwner)
                 .inspectParam(Objects::isNull)
-                .findInDB(projectRepository::findByProjectOwner)
+                .findInDB(projectRepository::checkAllObtainProject)
                 .doNothing();
     }
 
@@ -53,7 +53,7 @@ public class ProjectServiceImpl implements ProjectService {
     public boolean inspectPermission(HttpServletRequest request, Long projectId, BiFunction<Project, Long, Boolean> check) {
         Optional<Developer> developer = Optional.ofNullable((Developer) request.getSession().getAttribute("currentDeveloper"));
         Project project = getProject(projectId);
-        Long developerId = developer.map(Developer::getDeveloperId).get();
+        Long developerId = developer.map(Developer::getDeveloperId).orElse(null);
         if( check.apply(project, developerId) ) {
             return true;
         }
@@ -70,14 +70,14 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public boolean checkAllowEdit(Project project, Long developerId) {
+    public boolean checkAllowModify(Project project, Long developerId) {
         String patten = developerId + ",.*|.*,"+ developerId +",.*|.*," + developerId ;
         return Objects.nonNull(developerId) && project.getWhoJoins().matches(patten);
     }
 
     @Override
     public boolean checkAllowView(Project project, Long developerId) {
-        return project.getOvert() || checkAllowEdit(project, developerId);
+        return project.getOvert() || checkAllowModify(project, developerId);
     }
 
     @Override

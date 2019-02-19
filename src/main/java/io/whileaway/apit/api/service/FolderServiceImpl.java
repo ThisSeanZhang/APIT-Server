@@ -1,7 +1,10 @@
 package io.whileaway.apit.api.service;
 
+import io.whileaway.apit.account.entity.Developer;
 import io.whileaway.apit.api.entity.Folder;
+import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.repository.FolderRepository;
+import io.whileaway.apit.api.repository.ProjectRepository;
 import io.whileaway.apit.api.request.FilterFolder;
 import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.api.specs.FolderSpec;
@@ -18,19 +21,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
 
 @Service
 public class FolderServiceImpl implements FolderService {
 
     private final FolderRepository folderRepository;
     private final APIService apiService;
-//    private final ProjectService projectService;
 
     @Autowired
     public FolderServiceImpl(FolderRepository folderRepository, APIService apiService) {
         this.folderRepository = folderRepository;
         this.apiService = apiService;
-//        this.projectService = projectService;
     }
 
     @Override
@@ -89,9 +91,19 @@ public class FolderServiceImpl implements FolderService {
     }
 
     @Override
-    public void inspectPermission(HttpServletRequest request, Long folderId) {
+    public void inspectPermission(HttpServletRequest request, Long folderId, BiFunction<Project, Long, Boolean> check) {
+//        Optional<Developer> developer = Optional.ofNullable((Developer) request.getSession().getAttribute("currentDeveloper"));
 //        Folder folder = getFolder(folderId);
-//        projectService.inspectPermission(request, folder.getBelongProject());
+//        Project project = projectRepository.checkDeveloperIsJoin(folder.getBelongProject());
+//        Long developerId = developer.map(Developer::getDeveloperId).orElse(null);
+//        if( check.apply(project, developerId) ) {
+//            return true;
+//        }
+//        else if (project.getOvert()) {
+//            throw new CommonException(ControllerEnum.NOT_ALLOW);
+//        }else{
+//            throw new CommonException(ControllerEnum.NOT_FOUND);
+//        }
     }
 
     @Override
@@ -100,8 +112,6 @@ public class FolderServiceImpl implements FolderService {
     }
 
     private Folder getFolder(Long id) {
-        Optional<Folder> folder = folderRepository.findById(id);
-        if (folder.isEmpty()) throw new CommonException(ControllerEnum.NOT_FOUND);
-        return folder.get();
+        return folderRepository.findById(id).orElseThrow(()->new CommonException(ControllerEnum.NOT_FOUND));
     }
 }

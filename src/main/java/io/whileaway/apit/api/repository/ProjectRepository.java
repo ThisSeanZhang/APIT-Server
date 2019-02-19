@@ -17,5 +17,12 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             "and p.whoJoins like CONCAT(:developerId,',%')" +
             "or  p.whoJoins like CONCAT('%,',:developerId,',%')" +
             "or  p.whoJoins like CONCAT('%,',:developerId)")
-    Optional<Project> checkPermission (@Param("pid") Long pid, @Param("developerId") Long developerId);
+    Optional<Project> checkDeveloperIsJoin (@Param("pid") Long pid, @Param("developerId") Long developerId);
+
+    @Query("select p from Project p " +
+            "where p.projectOwner = :developerId " +
+            "or p.whoJoins like CONCAT(:developerId,',%')" +
+            "or  p.whoJoins like CONCAT('%,',:developerId,',%')" +
+            "or  p.whoJoins like CONCAT('%,',:developerId)")
+    Optional<List<Project>> checkAllObtainProject (@Param("developerId") Long developerId);
 }
