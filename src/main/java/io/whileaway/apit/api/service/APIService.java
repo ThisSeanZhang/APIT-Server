@@ -4,7 +4,6 @@ import io.whileaway.apit.api.entity.API;
 import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.base.Result;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 public interface APIService {
@@ -19,7 +18,4 @@ public interface APIService {
 
     API getById(Long aid);
 
-    void inspectPermission(HttpServletRequest request, Long aid);
-
-    void checkProjectOvert(Long id);
 }

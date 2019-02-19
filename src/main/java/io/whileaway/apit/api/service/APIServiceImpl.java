@@ -14,10 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @Service
 public class APIServiceImpl implements APIService {
@@ -65,14 +63,4 @@ public class APIServiceImpl implements APIService {
         return apiRepository.findByAid(aid).orElseThrow(() -> new CommonException(ControllerEnum.NOT_FOUND));
     }
 
-    @Override
-    public void inspectPermission(HttpServletRequest request, Long aid) {
-        API api = getById(aid);
-//        projectService.inspectPermission(request, api.getBelongProject());
-    }
-
-    @Override
-    public void checkProjectOvert(Long id) {
-//        projectService.checkOvert(getById(id).getBelongProject());
-    }
 }

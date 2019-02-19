@@ -1,10 +1,7 @@
 package io.whileaway.apit.api.service;
 
-import io.whileaway.apit.account.entity.Developer;
 import io.whileaway.apit.api.entity.Folder;
-import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.repository.FolderRepository;
-import io.whileaway.apit.api.repository.ProjectRepository;
 import io.whileaway.apit.api.request.FilterFolder;
 import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.api.specs.FolderSpec;
@@ -16,12 +13,9 @@ import io.whileaway.apit.base.enums.ControllerEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.function.BiFunction;
 
 @Service
 public class FolderServiceImpl implements FolderService {
@@ -78,11 +72,11 @@ public class FolderServiceImpl implements FolderService {
         List<Node> byBelongFolder = new ArrayList<>();
 
         try{ listResult = filterFolders(filterFolder).getData(); }
-        catch (CommonException e) { System.out.println(e); }
+        catch (CommonException e) { System.out.println(e.getMessage()); }
         finally { if ( !listResult.isEmpty() ) nodes.addAll(listResult); }
 
         try{ byBelongFolder = apiService.findByBelongFolder(filterFolder.getParentId()).getData(); }
-        catch (CommonException e) { System.out.println(e); }
+        catch (CommonException e) { System.out.println(e.getMessage()); }
         finally { if ( !byBelongFolder.isEmpty() ) nodes.addAll(byBelongFolder); }
 
         if (nodes.isEmpty())
@@ -90,26 +84,6 @@ public class FolderServiceImpl implements FolderService {
         return ResultUtil.success(ControllerEnum.SUCCESS, nodes);
     }
 
-    @Override
-    public void inspectPermission(HttpServletRequest request, Long folderId, BiFunction<Project, Long, Boolean> check) {
-//        Optional<Developer> developer = Optional.ofNullable((Developer) request.getSession().getAttribute("currentDeveloper"));
-//        Folder folder = getFolder(folderId);
-//        Project project = projectRepository.checkDeveloperIsJoin(folder.getBelongProject());
-//        Long developerId = developer.map(Developer::getDeveloperId).orElse(null);
-//        if( check.apply(project, developerId) ) {
-//            return true;
-//        }
-//        else if (project.getOvert()) {
-//            throw new CommonException(ControllerEnum.NOT_ALLOW);
-//        }else{
-//            throw new CommonException(ControllerEnum.NOT_FOUND);
-//        }
-    }
-
-    @Override
-    public void checkProjectOvert(Long id) {
-//        projectService.checkOvert(getFolder(id).getBelongProject());
-    }
 
     private Folder getFolder(Long id) {
         return folderRepository.findById(id).orElseThrow(()->new CommonException(ControllerEnum.NOT_FOUND));
