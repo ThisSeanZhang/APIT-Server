@@ -1,5 +1,7 @@
 package io.whileaway.apit.api.controller;
 
+import io.whileaway.apit.api.PermissionType;
+import io.whileaway.apit.api.annotation.CheckProjectPermission;
 import io.whileaway.apit.api.entity.API;
 import io.whileaway.apit.api.request.CreateAPI;
 import io.whileaway.apit.api.service.APIService;
@@ -39,8 +41,9 @@ public class APIController {
     }
 
     @PutMapping("/{aid}")
+    @CheckProjectPermission(PermissionType.MODIFY)
     public Result<API> createAPI(HttpServletRequest request, @PathVariable("pid") Long pid, @PathVariable("aid") Long aid, @Valid @RequestBody API updateApi) {
-        projectService.inspectPermission(request, pid, projectService::checkAllowModify);
+//        projectService.inspectPermission(request, pid, projectService::checkAllowModify);
         updateApi.setAid(aid);
         return apiService.updateApi(updateApi);
     }

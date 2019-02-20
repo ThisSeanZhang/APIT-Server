@@ -1,9 +1,10 @@
 package io.whileaway.apit.api.controller;
 
+import io.whileaway.apit.api.PermissionType;
+import io.whileaway.apit.api.annotation.CheckProjectPermission;
 import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.request.CreateProject;
 import io.whileaway.apit.api.response.Node;
-import io.whileaway.apit.api.service.FolderService;
 import io.whileaway.apit.api.service.ProjectService;
 import io.whileaway.apit.base.CommonException;
 import io.whileaway.apit.base.Result;
@@ -33,10 +34,11 @@ public class ProjectController {
         return projectService.getProjectsByOwnerId(id);
     }
 
+    @CheckProjectPermission(PermissionType.VIEW)
     @GetMapping("/{pid}/content/first-layer")
     public Result<List<Node>> getFirstLayerContent (HttpServletRequest request, @PathVariable("pid") Long pid) {
         if (pid == null) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
-        projectService.inspectPermission(request, pid, projectService::checkAllowView);
+//        projectService.inspectPermission(request, pid, projectService::checkAllowView);
         return projectService.firstLayerContent(pid);
     }
 
@@ -46,15 +48,17 @@ public class ProjectController {
         return projectService.createProject(createProject.convertToProject());
     }
 
+    @CheckProjectPermission(PermissionType.VIEW)
     @GetMapping("/{id}")
     public Result<Project> findProjectById (HttpServletRequest request, @PathVariable("id") Long pid) {
-        projectService.inspectPermission(request, pid, projectService::checkAllowView);
+//        projectService.inspectPermission(request, pid, projectService::checkAllowView);
         return ResultUtil.success(ControllerEnum.SUCCESS, projectService.getProject(pid));
     }
 
     @PutMapping("/{id}")
+    @CheckProjectPermission(PermissionType.MODIFY)
     public Result<Project> modifyProjectById (HttpServletRequest request, @PathVariable("id") Long pid) {
-        projectService.inspectPermission(request, pid, projectService::checkAllowModify);
+//        projectService.inspectPermission(request, pid, projectService::checkAllowModify);
         return ResultUtil.success(ControllerEnum.SUCCESS, projectService.getProject(pid));
     }
 }

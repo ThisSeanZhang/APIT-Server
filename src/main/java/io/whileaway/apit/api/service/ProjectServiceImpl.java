@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -71,8 +72,8 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public boolean checkAllowModify(Project project, Long developerId) {
-        String patten = developerId + ",.*|.*,"+ developerId +",.*|.*," + developerId ;
-        return Objects.nonNull(developerId) && project.getWhoJoins().matches(patten);
+        String patten = developerId + ",.*|.*,"+ developerId +",.*|.*," + developerId;
+        return Objects.nonNull(developerId) && project.getWhoJoins().matches(patten) || checkAllowDelete(project, developerId);
     }
 
     @Override
@@ -85,5 +86,12 @@ public class ProjectServiceImpl implements ProjectService {
         Optional<Project> project = projectRepository.findById(pid);
         if (project.isEmpty()) throw new CommonException(ControllerEnum.NOT_FOUND);
         return project.get();
+    }
+
+    public static void main (String [] args) {
+        List<String> strings = List.of("1", "1,", "1,11,12", "11,1,12", "11,12,1", "11,11,11");
+        String patten = "^(.*,)?" + 12 + "(,.*)?$";
+        strings.stream().filter(s -> s.matches(patten))
+                .forEach(System.out::println);
     }
 }
