@@ -28,6 +28,12 @@ public class DeveloperController {
         return developerService.emailIsExists(email);
     }
 
+    /**
+     * https://www.cnblogs.com/leechenxiang/p/6181449.html
+     * 后面记得加上限制，访问次数限制
+     * @param developerName
+     * @return
+     */
     @GetMapping("/developer-name/{developerName}")
     public Result developerNameIsExists(@PathVariable("developerName") String developerName){
         return developerService.nameIsExists(developerName);

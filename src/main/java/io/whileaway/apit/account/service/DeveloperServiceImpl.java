@@ -11,7 +11,9 @@ import io.whileaway.apit.base.*;
 import io.whileaway.apit.base.enums.ControllerEnum;
 import io.whileaway.apit.base.enums.ResponseEnum;
 import io.whileaway.apit.base.trial.Biss;
+import io.whileaway.apit.utils.Random;
 import io.whileaway.apit.utils.StringUtils;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,6 +41,8 @@ public class DeveloperServiceImpl implements DeveloperService {
         if (StringUtils.anyIsEmptyOrBlank(developer.getDeveloperName(), developer.getDeveloperPass(), developer.getEmail())) {
             throw new CommonException(ControllerEnum.PARAMETER_ERROR);
         }
+        developer.setSalt(Random.getSalt(developer.getDeveloperPass()));
+        developer.setDeveloperPass(new Md5Hash(developer.getDeveloperPass(), developer.getSalt()).toString());
         Developer data = developerRepository.save(developer);
         Project project = projectService.createProject(new Project("默认项目", data.getDeveloperId())).getData();
         Folder folder = folderService.createFolder(new Folder("默认文件夹", data.getDeveloperId(), project.getPid())).getData();

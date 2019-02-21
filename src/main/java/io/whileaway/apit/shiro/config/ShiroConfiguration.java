@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import org.apache.shiro.mgt.SecurityManager;
 
 import java.util.LinkedHashMap;
-import java.util.List;
 
 @Configuration
 public class ShiroConfiguration {
@@ -35,12 +34,11 @@ public class ShiroConfiguration {
         LinkedHashMap<String, String> validUrlPermission = urlPermissionService.findValidUrlPermission();
         validUrlPermission.put("/css/**", "anon");
         validUrlPermission.put("/session", "anon");
+        validUrlPermission.put("/checks/connection", "anon");
+        validUrlPermission.put("/developers", "anon");
+        validUrlPermission.put("/developers/developer-name/*", "anon");
         validUrlPermission.put("/**", "authc");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(validUrlPermission);
-
-//        shiroFilterFactoryBean.setLoginUrl("/session");
-//        shiroFilterFactoryBean.setSuccessUrl("/index");
-//        shiroFilterFactoryBean.setUnauthorizedUrl("/403");
         shiroFilterFactoryBean.getFilters().put("authc", shiroLoginFilter);
         return shiroFilterFactoryBean;
     }

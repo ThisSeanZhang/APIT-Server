@@ -10,10 +10,11 @@ public class Developer {
     private Long developerId;
     @Column(length = 50,unique = true, nullable = false)
     private String developerName;
-    @Column(length = 16, nullable = false)
+    @Column(length = 64, nullable = false)
     private String developerPass;
     @Column(length = 50, nullable = false)
     private String email;
+    private String salt;
     private Long defaultFolder;
     private Long defaultProject;
 
@@ -84,5 +85,13 @@ public class Developer {
                 ", defaultFolder=" + defaultFolder +
                 ", defaultProject=" + defaultProject +
                 '}';
+    }
+
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
     }
 }
