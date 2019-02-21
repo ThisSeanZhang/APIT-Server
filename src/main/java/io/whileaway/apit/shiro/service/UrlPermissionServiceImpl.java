@@ -9,8 +9,12 @@ import java.util.LinkedHashMap;
 @Service
 public class UrlPermissionServiceImpl implements UrlPermissionService {
 
+    private final UrlPermissionRepository urlPermissionRepository;
+
     @Autowired
-    UrlPermissionRepository urlPermissionRepository;
+    public UrlPermissionServiceImpl(UrlPermissionRepository urlPermissionRepository) {
+        this.urlPermissionRepository = urlPermissionRepository;
+    }
 
     @Override
     public LinkedHashMap<String, String> findValidUrlPermission() {

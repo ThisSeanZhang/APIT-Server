@@ -12,7 +12,7 @@ public class UrlPermission {
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long upid;
     private String url;
-    private String describe;
+    private String description;
     private Boolean available;
     private String permission;
 
@@ -48,11 +48,11 @@ public class UrlPermission {
         this.permission = permission;
     }
 
-    public String getDescribe() {
-        return describe;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescribe(String describe) {
-        this.describe = describe;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
