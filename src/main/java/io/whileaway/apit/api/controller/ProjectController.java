@@ -29,16 +29,14 @@ public class ProjectController {
     }
 
     @GetMapping("/owner/{id}")
-    public Result<List<Project>> getProjectsByOwnerId (HttpServletRequest request, @PathVariable("id") Long id) {
-//        projectService.inspectPermission(request, id, projectService::checkAllowView);
+    public Result<List<Project>> getProjectsByOwnerId (@PathVariable("id") Long id) {
         return projectService.getProjectsByOwnerId(id);
     }
 
     @CheckProjectPermission(PermissionType.VIEW)
     @GetMapping("/{pid}/content/first-layer")
-    public Result<List<Node>> getFirstLayerContent (HttpServletRequest request, @PathVariable("pid") Long pid) {
+    public Result<List<Node>> getFirstLayerContent (@PathVariable("pid") Long pid) {
         if (pid == null) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
-//        projectService.inspectPermission(request, pid, projectService::checkAllowView);
         return projectService.firstLayerContent(pid);
     }
 
@@ -49,16 +47,14 @@ public class ProjectController {
     }
 
     @CheckProjectPermission(PermissionType.VIEW)
-    @GetMapping("/{id}")
-    public Result<Project> findProjectById (HttpServletRequest request, @PathVariable("id") Long pid) {
-//        projectService.inspectPermission(request, pid, projectService::checkAllowView);
+    @GetMapping("/{pid}")
+    public Result<Project> findProjectById (@PathVariable("pid") Long pid) {
         return ResultUtil.success(ControllerEnum.SUCCESS, projectService.getProject(pid));
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{pid}")
     @CheckProjectPermission(PermissionType.MODIFY)
-    public Result<Project> modifyProjectById (HttpServletRequest request, @PathVariable("id") Long pid) {
-//        projectService.inspectPermission(request, pid, projectService::checkAllowModify);
+    public Result<Project> modifyProjectById (@PathVariable("pid") Long pid) {
         return ResultUtil.success(ControllerEnum.SUCCESS, projectService.getProject(pid));
     }
 }

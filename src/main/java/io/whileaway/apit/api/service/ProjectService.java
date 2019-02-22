@@ -16,11 +16,11 @@ public interface ProjectService {
 
     Result<List<Node>> firstLayerContent (Long belongProject);
 
-    boolean inspectPermission(HttpServletRequest request, Long projectId, BiFunction<Project, Long, Boolean> check);
+    boolean inspectPermission(Long developerId, Long projectId, BiFunction<Project, Long, Boolean> check);
 
-    boolean checkAllowDelete(Project project, Long id);
+    boolean checkAllowModifyProject(Project project, Long checkAllowModifyProject);
 
-    boolean checkAllowModify(Project project, Long id);
+    boolean checkAllowModifyContent(Project project, Long developerId);
 
     boolean checkAllowView(Project project, Long id);
 

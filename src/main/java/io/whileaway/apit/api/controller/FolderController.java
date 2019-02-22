@@ -1,5 +1,7 @@
 package io.whileaway.apit.api.controller;
 
+import io.whileaway.apit.api.PermissionType;
+import io.whileaway.apit.api.annotation.CheckProjectPermission;
 import io.whileaway.apit.api.request.FilterFolder;
 import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.api.service.FolderService;
@@ -16,12 +18,10 @@ import java.util.List;
 public class FolderController {
 
     private final FolderService folderService;
-    private final ProjectService projectService;
 
     @Autowired
-    public FolderController(FolderService folderService, ProjectService projectService) {
+    public FolderController(FolderService folderService) {
         this.folderService = folderService;
-        this.projectService = projectService;
     }
 //
 //    @GetMapping("/belong-project/{id}")
@@ -36,8 +36,8 @@ public class FolderController {
 //    }
 //
     @GetMapping("/{fid}/content")
-    public Result<List<Node>> filterFolders (HttpServletRequest request, @PathVariable("pid") Long pid, @PathVariable("fid") Long fid, FilterFolder filterFolder) {
-        projectService.inspectPermission(request, pid, projectService::checkAllowView);
+    @CheckProjectPermission(PermissionType.VIEW)
+    public Result<List<Node>> filterFolders(@PathVariable("fid") Long fid, FilterFolder filterFolder) {
         filterFolder.setParentId(fid);
         return folderService.folderContent(filterFolder);
     }

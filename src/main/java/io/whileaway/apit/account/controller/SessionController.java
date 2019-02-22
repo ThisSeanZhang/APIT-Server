@@ -5,6 +5,7 @@ import io.whileaway.apit.account.request.CreateSession;
 import io.whileaway.apit.account.service.SessionService;
 import io.whileaway.apit.base.Result;
 import io.whileaway.apit.base.ResultUtil;
+import io.whileaway.apit.base.enums.SessionKeyConstant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -30,7 +31,7 @@ public class SessionController {
     public Result<Developer> createSession(HttpServletRequest httpServletRequest, @Valid @RequestBody CreateSession createSession, BindingResult bindingResult) {
         ResultUtil.inspect(bindingResult);
         Result<Developer> result = sessionService.createSession(createSession);
-        httpServletRequest.getSession().setAttribute("currentDeveloper", result.getData());
+        httpServletRequest.getSession().setAttribute(SessionKeyConstant.CURRENT_DEVELOPER, result.getData());
         return result;
     }
 }

@@ -51,10 +51,10 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public boolean inspectPermission(HttpServletRequest request, Long projectId, BiFunction<Project, Long, Boolean> check) {
-        Optional<Developer> developer = Optional.ofNullable((Developer) request.getSession().getAttribute("currentDeveloper"));
+    public boolean inspectPermission(Long developerId, Long projectId, BiFunction<Project, Long, Boolean> check) {
+//        Optional<Developer> developer = Optional.ofNullable((Developer) request.getSession().getAttribute("currentDeveloper"));
+//        Long developerId = developer.map(Developer::getDeveloperId).orElse(null);
         Project project = getProject(projectId);
-        Long developerId = developer.map(Developer::getDeveloperId).orElse(null);
         if( check.apply(project, developerId) ) {
             return true;
         }
@@ -66,19 +66,25 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public boolean checkAllowDelete(Project project, Long developerId) {
-        return Objects.equals(project.getProjectOwner(), developerId);
+    public boolean checkAllowModifyProject(Project project, Long developerId) {
+        boolean b = Objects.equals(project.getProjectOwner(), developerId);
+        System.out.println("Is Allow developer" + developerId + " Modify Project:" + b + "for project " + project.getPid());
+        return b;
     }
 
     @Override
-    public boolean checkAllowModify(Project project, Long developerId) {
-        String patten = developerId + ",.*|.*,"+ developerId +",.*|.*," + developerId;
-        return Objects.nonNull(developerId) && project.getWhoJoins().matches(patten) || checkAllowDelete(project, developerId);
+    public boolean checkAllowModifyContent(Project project, Long developerId) {
+        String patten = "^(.*,)?" + developerId + "(,.*)?$";
+        boolean b = Objects.nonNull(developerId) && project.getWhoJoins().matches(patten) || checkAllowModifyProject(project, developerId);
+        System.out.println("Is Allow developer" + developerId + " Modify Content:" + b + "for project " + project.getPid());
+        return b;
     }
 
     @Override
     public boolean checkAllowView(Project project, Long developerId) {
-        return project.getOvert() || checkAllowModify(project, developerId);
+        boolean b = project.getOvert() || checkAllowModifyContent(project, developerId);
+        System.out.println("Is Allow developer" + developerId + " View Project:" + b + "for project " + project.getPid());
+        return b;
     }
 
     @Override
@@ -88,10 +94,10 @@ public class ProjectServiceImpl implements ProjectService {
         return project.get();
     }
 
-    public static void main (String [] args) {
-        List<String> strings = List.of("1", "1,", "1,11,12", "11,1,12", "11,12,1", "11,11,11");
-        String patten = "^(.*,)?" + 12 + "(,.*)?$";
-        strings.stream().filter(s -> s.matches(patten))
-                .forEach(System.out::println);
-    }
+//    public static void main (String [] args) {
+//        List<String> strings = List.of("1", "1,", "1,11,12", "11,1,12", "11,12,1", "11,11,11");
+//        String patten = "^(.*,)?" + 12 + "(,.*)?$";
+//        strings.stream().filter(s -> s.matches(patten))
+//                .forEach(System.out::println);
+//    }
 }
