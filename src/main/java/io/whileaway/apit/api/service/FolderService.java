@@ -24,4 +24,6 @@ public interface FolderService {
     Result<Folder> findFolderById(Long fid);
 
     Result<Folder> modifyFolder(Folder convertToFolder);
+
+    Result<Folder> deleteFolder(Long fid);
 }

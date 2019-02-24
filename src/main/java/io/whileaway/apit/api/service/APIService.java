@@ -18,6 +18,10 @@ public interface APIService {
 
     Result<API> updateApi(API updateApi);
 
+    List<API> getByBelongFolder(Long fid);
+
+    void saveAll(List<API> apis);
+
     API getById(Long aid);
 
     Result<API> delApi(Long aid);

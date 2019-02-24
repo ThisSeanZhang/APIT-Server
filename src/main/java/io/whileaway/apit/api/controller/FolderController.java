@@ -68,4 +68,11 @@ public class FolderController {
         modifyFolder.setFid(fid);
         return folderService.modifyFolder(modifyFolder.convertToFolder());
     }
+
+    @DeleteMapping("/{fid}")
+    @CheckProjectPermission(PermissionType.DELETE)
+    public Result<Folder> modifyFolder (@PathVariable("fid") Long fid) {
+        return folderService.deleteFolder(fid);
+    }
+
 }

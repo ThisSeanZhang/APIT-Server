@@ -1,5 +1,6 @@
 package io.whileaway.apit.api.service;
 
+import io.whileaway.apit.api.entity.API;
 import io.whileaway.apit.api.entity.Folder;
 import io.whileaway.apit.api.enums.StatusDict;
 import io.whileaway.apit.api.repository.FolderRepository;
@@ -11,13 +12,17 @@ import io.whileaway.apit.base.Result;
 import io.whileaway.apit.base.ResultUtil;
 import io.whileaway.apit.base.Spec;
 import io.whileaway.apit.base.enums.ControllerEnum;
+import io.whileaway.apit.base.enums.ResultEnum;
 import io.whileaway.apit.utils.DataBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FolderServiceImpl implements FolderService {
@@ -111,6 +116,26 @@ public class FolderServiceImpl implements FolderService {
         data.setBelongProject(folder.getBelongProject());
         data.setFolderName(folder.getFolderName());
         return ResultUtil.success(folderRepository.save(data));
+    }
+
+    @Override
+    @Transactional
+    public Result<Folder> deleteFolder(Long fid) {
+        Folder folder = getFolder(fid);
+        folder.setStatus(StatusDict.DELETE.getCode());
+        Optional<List<Folder>> subFolder = folderRepository.findByParentId(fid);
+        if (subFolder.isPresent()) {
+            List<Folder> collect = subFolder.get().stream().peek(sub -> sub.setStatus(StatusDict.DELETE.getCode()))
+                    .collect(Collectors.toList());
+            folderRepository.saveAll(collect);
+        }
+        List<API> subApi = apiService.getByBelongFolder(fid);
+        if (!subApi.isEmpty()) {
+            List<API> collects = subApi.stream().peek(sub -> sub.setStatus(StatusDict.DELETE.getCode()))
+                    .collect(Collectors.toList());
+            apiService.saveAll(collects);
+        }
+        return ResultUtil.success(folderRepository.save(folder));
     }
 
     private Folder getFolder(Long id) {

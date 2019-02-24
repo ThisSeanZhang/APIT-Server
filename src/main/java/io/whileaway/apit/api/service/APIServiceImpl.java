@@ -72,6 +72,20 @@ public class APIServiceImpl implements APIService {
     }
 
     @Override
+    public List<API> getByBelongFolder(Long fid) {
+        return new Spec<API, API> ()
+                .appendCondition(APISpec.belongFolder(()->fid))
+                .appendCondition(APISpec.statusNormal())
+                .findInDB(apiRepository::findAll)
+                .doNothing().getData();
+    }
+
+    @Override
+    public void saveAll(List<API> apis) {
+        apiRepository.saveAll(apis);
+    }
+
+    @Override
     public API getById(Long aid) {
         return apiRepository.findByAid(aid).orElseThrow(() -> new CommonException(ControllerEnum.NOT_FOUND));
     }
