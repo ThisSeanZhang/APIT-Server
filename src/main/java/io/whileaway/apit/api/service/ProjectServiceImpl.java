@@ -1,6 +1,5 @@
 package io.whileaway.apit.api.service;
 
-import io.whileaway.apit.account.entity.Developer;
 import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.repository.ProjectRepository;
 import io.whileaway.apit.api.response.Node;
@@ -12,24 +11,23 @@ import io.whileaway.apit.utils.DatasBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.function.BiFunction;
-import java.util.stream.Stream;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
 
     private final ProjectRepository projectRepository;
     private final FolderService folderService;
+    private final APIService apiService;
 
     @Autowired
-    public ProjectServiceImpl(ProjectRepository projectRepository, FolderService folderService) {
+    public ProjectServiceImpl(ProjectRepository projectRepository, FolderService folderService, APIService apiService) {
         this.projectRepository = projectRepository;
         this.folderService = folderService;
+        this.apiService = apiService;
     }
 
     @Override
@@ -47,7 +45,22 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Result<List<Node>> firstLayerContent(Long belongProject) {
-        return folderService.firstLayerFolders(belongProject);
+//        return folderService.firstLayerFolders(belongProject);
+        List<Node> nodes = new ArrayList<>();
+        List<Node> listResult = new ArrayList<>();
+        List<Node> byBelongFolder = new ArrayList<>();
+
+        try{ listResult = folderService.firstLayerFolders(belongProject).getData(); }
+        catch (CommonException e) { System.out.println(e.getMessage()); }
+        finally { if ( !listResult.isEmpty() ) nodes.addAll(listResult); }
+
+        try{ byBelongFolder = apiService.findFirstLayerByProjectId(belongProject).getData(); }
+        catch (CommonException e) { System.out.println(e.getMessage()); }
+        finally { if ( !byBelongFolder.isEmpty() ) nodes.addAll(byBelongFolder); }
+
+        if (nodes.isEmpty())
+            throw new CommonException(ControllerEnum.NOT_FOUND);
+        return ResultUtil.success(ControllerEnum.SUCCESS, nodes);
     }
 
     @Override
@@ -89,9 +102,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project getProject(Long pid) {
-        Optional<Project> project = projectRepository.findById(pid);
-        if (project.isEmpty()) throw new CommonException(ControllerEnum.NOT_FOUND);
-        return project.get();
+        return projectRepository.findById(pid).orElseThrow( () -> new CommonException(ControllerEnum.NOT_FOUND) );
+    }
+
+    @Override
+    public Result<List<Node>> firstLayerFolder(Long pid) {
+        return folderService.firstLayerFolders(pid);
     }
 
 //    public static void main (String [] args) {

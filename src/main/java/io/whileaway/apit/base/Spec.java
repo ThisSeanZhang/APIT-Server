@@ -35,6 +35,12 @@ public class Spec<A, B> {
         return new Spec<>(primitive);
     }
 
+    public Spec<A, B> findInDBUnCheck (Function<Specification<A>, List<A>> findInDB) {
+        Specification<A> filterCondition = this.conditions.stream().filter(Objects::nonNull).reduce(this::andJoin).orElse(null);
+        List<A> primitive = findInDB.apply(filterCondition);
+        return new Spec<>(primitive);
+    }
+
     public Spec<A, B> appendCondition(Specification<A> specification) {
         this.conditions.add(specification);
         return this;

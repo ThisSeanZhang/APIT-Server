@@ -15,7 +15,7 @@ public class Node {
     private Long belongProject;
 
     public Node(Folder folder) {
-        this.nid = "folder" + folder.getFid().toString();
+        this.nid = "folder-" + folder.getFid().toString();
         this.label = folder.getFolderName();
         this.leaf = false;
         this.type = 0;
@@ -26,7 +26,7 @@ public class Node {
     }
 
     public Node(API api) {
-        this.nid = "api" + api.getAid().toString();
+        this.nid = "api-" + api.getAid().toString();
         this.label = api.getApiName();
         this.leaf = true;
         this.type = 1;

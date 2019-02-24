@@ -19,4 +19,9 @@ public interface FolderService {
 
     Result<List<Node>> folderContent(FilterFolder filterFolder);
 
+    Result<List<Node>> subFolders(FilterFolder filterFolder);
+
+    Result<Folder> findFolderById(Long fid);
+
+    Result<Folder> modifyFolder(Folder convertToFolder);
 }

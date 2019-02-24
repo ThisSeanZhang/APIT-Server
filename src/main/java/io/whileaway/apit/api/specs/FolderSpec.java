@@ -1,5 +1,6 @@
 package io.whileaway.apit.api.specs;
 
+import io.whileaway.apit.api.enums.StatusDict;
 import io.whileaway.apit.base.Spec;
 import io.whileaway.apit.utils.StringUtils;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,7 +30,9 @@ public class FolderSpec<A, B> {
         return Spec.equal("parentId", Objects::isNull, supplier);
     }
 
-
+    public static<A> Specification<A> statusNormal() {
+        return Spec.equal("status", (i)->false, StatusDict.NORMAL::getCode);
+    }
 
 
 }

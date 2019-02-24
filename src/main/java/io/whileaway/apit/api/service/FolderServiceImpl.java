@@ -1,6 +1,7 @@
 package io.whileaway.apit.api.service;
 
 import io.whileaway.apit.api.entity.Folder;
+import io.whileaway.apit.api.enums.StatusDict;
 import io.whileaway.apit.api.repository.FolderRepository;
 import io.whileaway.apit.api.request.FilterFolder;
 import io.whileaway.apit.api.response.Node;
@@ -10,6 +11,7 @@ import io.whileaway.apit.base.Result;
 import io.whileaway.apit.base.ResultUtil;
 import io.whileaway.apit.base.Spec;
 import io.whileaway.apit.base.enums.ControllerEnum;
+import io.whileaway.apit.utils.DataBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -84,6 +86,32 @@ public class FolderServiceImpl implements FolderService {
         return ResultUtil.success(ControllerEnum.SUCCESS, nodes);
     }
 
+    @Override
+    public Result<List<Node>> subFolders(FilterFolder filterFolder) {
+        return new Spec<Folder, Node>()
+                .appendCondition(FolderSpec.folderParentId(filterFolder::getParentId))
+                .appendCondition(FolderSpec.statusNormal())
+                .findInDBUnCheck(folderRepository::findAll)
+                .convert(Node::new);
+    }
+
+    @Override
+    public Result<Folder> findFolderById(Long fid) {
+        if (Objects.isNull(fid))
+            throw new CommonException(ControllerEnum.PARAMETER_ERROR);
+        return ResultUtil.success(
+                folderRepository.findByFidAndStatus(fid, StatusDict.NORMAL.getCode())
+                        .orElseThrow(()->new CommonException(ControllerEnum.NOT_FOUND)));
+    }
+
+    @Override
+    public Result<Folder> modifyFolder(Folder folder) {
+        Folder data = getFolder(folder.getFid());
+        data.setParentId(folder.getParentId());
+        data.setBelongProject(folder.getBelongProject());
+        data.setFolderName(folder.getFolderName());
+        return ResultUtil.success(folderRepository.save(data));
+    }
 
     private Folder getFolder(Long id) {
         return folderRepository.findById(id).orElseThrow(()->new CommonException(ControllerEnum.NOT_FOUND));

@@ -1,5 +1,7 @@
 package io.whileaway.apit.api.entity;
 
+import io.whileaway.apit.api.enums.StatusDict;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,12 +17,14 @@ public class Folder {
     private Long parentId;
     private Long folderOwnerId;
     private Long belongProject;
+    private Integer status;
 
     public Folder() { }
     public Folder(String folderName, Long folderOwnerId, Long belongProject) {
         this.folderName = folderName;
         this.folderOwnerId = folderOwnerId;
         this.belongProject = belongProject;
+        this.status = StatusDict.NORMAL.getCode();
     }
 
     public Folder(String folderName, Long parentId, Long folderOwnerId, Long belongProject) {
@@ -28,6 +32,7 @@ public class Folder {
         this.parentId = parentId;
         this.folderOwnerId = folderOwnerId;
         this.belongProject = belongProject;
+        this.status = StatusDict.NORMAL.getCode();
     }
 
     public Long getFid() {
@@ -68,5 +73,13 @@ public class Folder {
 
     public void setFolderOwnerId(Long folderOwnerId) {
         this.folderOwnerId = folderOwnerId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

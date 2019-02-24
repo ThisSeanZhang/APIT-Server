@@ -36,8 +36,12 @@ public class ResultUtil {
         return success(controllerEnum.getCode(), controllerEnum.getMessage(), data);
     }
 
-    public static<T> Result<T> success(ControllerEnum controllerEnum) {
-        return success(controllerEnum.getCode(), controllerEnum.getMessage(), null);
+    public static<T> Result<T> success(T data) {
+        return success(ControllerEnum.SUCCESS.getCode(), ControllerEnum.SUCCESS.getMessage(), data);
+    }
+
+    public static<T> Result<T> success() {
+        return success(ControllerEnum.SUCCESS, null);
     }
 
 

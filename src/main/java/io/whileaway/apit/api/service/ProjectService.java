@@ -25,4 +25,6 @@ public interface ProjectService {
     boolean checkAllowView(Project project, Long id);
 
     Project getProject(Long pid);
+
+    Result<List<Node>> firstLayerFolder(Long pid);
 }

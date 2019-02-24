@@ -10,6 +10,8 @@ public interface APIService {
 
     Result<List<Node>> findByBelongFolder(Long belongFolder);
 
+    Result<List<Node>> findFirstLayerByProjectId(Long belongProject);
+
     Result<API> findById(Long aid);
 
     Result<API> createAPI(API api);
@@ -18,4 +20,5 @@ public interface APIService {
 
     API getById(Long aid);
 
+    Result<API> delApi(Long aid);
 }

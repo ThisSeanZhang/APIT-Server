@@ -42,4 +42,11 @@ public class APIController {
         updateApi.setAid(aid);
         return apiService.updateApi(updateApi);
     }
+
+    @DeleteMapping("/{aid}")
+    @CheckProjectPermission(PermissionType.DELETE)
+    public Result<API> delAPI(@PathVariable("aid") Long aid) {
+        return apiService.delApi(aid);
+    }
+
 }

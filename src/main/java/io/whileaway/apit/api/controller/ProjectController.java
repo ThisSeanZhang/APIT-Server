@@ -15,6 +15,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -40,8 +41,15 @@ public class ProjectController {
         return projectService.firstLayerContent(pid);
     }
 
+    @CheckProjectPermission(PermissionType.VIEW)
+    @GetMapping("/{pid}/folders/first-layer")
+    public Result<List<Node>> getFirstLayerFolder (@PathVariable("pid") Long pid) {
+        if (pid == null) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
+        return projectService.firstLayerFolder(pid);
+    }
+
     @PostMapping
-    public Result<Project> createProject (CreateProject createProject, BindingResult bindingResult){
+    public Result<Project> createProject (@Valid @RequestBody CreateProject createProject, BindingResult bindingResult){
         ResultUtil.inspect(bindingResult);
         return projectService.createProject(createProject.convertToProject());
     }

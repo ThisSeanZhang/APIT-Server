@@ -15,4 +15,6 @@ public interface FolderRepository extends JpaRepository<Folder, Long> , JpaSpeci
     Optional<List<Folder>> findByParentId(Long parentId);
 
     Optional<List<Folder>> findByBelongProjectAndFolderOwnerId(Long belongProject, Long folderOwnerId);
+
+    Optional<Folder> findByFidAndStatus(Long fid, Integer code);
 }

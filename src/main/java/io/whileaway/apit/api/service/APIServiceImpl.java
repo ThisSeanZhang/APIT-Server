@@ -1,6 +1,7 @@
 package io.whileaway.apit.api.service;
 
 import io.whileaway.apit.api.entity.API;
+import io.whileaway.apit.api.enums.StatusDict;
 import io.whileaway.apit.api.repository.APIRepository;
 import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.api.specs.APISpec;
@@ -33,6 +34,17 @@ public class APIServiceImpl implements APIService {
     public Result<List<Node>> findByBelongFolder(Long belongFolder) {
         return new Spec<API, Node> ()
                 .appendCondition(APISpec.belongFolder(()->belongFolder))
+                .appendCondition(APISpec.statusNormal())
+                .findInDB(apiRepository::findAll)
+                .convert(Node::new);
+    }
+
+    @Override
+    public Result<List<Node>> findFirstLayerByProjectId(Long belongProject) {
+        return new Spec<API, Node> ()
+                .appendCondition(APISpec.belongProject(()->belongProject))
+                .appendCondition(APISpec.belongFolderIsNull())
+                .appendCondition(APISpec.statusNormal())
                 .findInDB(apiRepository::findAll)
                 .convert(Node::new);
     }
@@ -54,6 +66,7 @@ public class APIServiceImpl implements APIService {
 
     @Override
     public Result<API> updateApi(API updateApi) {
+        updateApi.setStatus(StatusDict.NORMAL.getCode());
         API data = apiRepository.save(updateApi);
         return ResultUtil.success(ControllerEnum.SUCCESS, data);
     }
@@ -61,6 +74,14 @@ public class APIServiceImpl implements APIService {
     @Override
     public API getById(Long aid) {
         return apiRepository.findByAid(aid).orElseThrow(() -> new CommonException(ControllerEnum.NOT_FOUND));
+    }
+
+    @Override
+    public Result<API> delApi(Long aid) {
+        API api = getById(aid);
+        api.setStatus(StatusDict.DELETE.getCode());
+        apiRepository.save(api);
+        return ResultUtil.success();
     }
 
 }
