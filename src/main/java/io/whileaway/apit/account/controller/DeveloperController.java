@@ -1,6 +1,7 @@
 package io.whileaway.apit.account.controller;
 
 import io.whileaway.apit.account.request.CreateDeveloper;
+import io.whileaway.apit.account.response.DeveloperIdName;
 import io.whileaway.apit.account.service.DeveloperService;
 import io.whileaway.apit.base.Result;
 import io.whileaway.apit.base.ResultUtil;
@@ -9,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequestMapping("/developers")
@@ -33,4 +35,8 @@ public class DeveloperController {
         return developerService.nameIsExists(developerName);
     }
 
+    @GetMapping("/developer-name-email-like/{key}")
+    public Result<List<DeveloperIdName>> findDeveloperByNameLike(@PathVariable("key") String key){
+        return developerService.findByNameOrEmailLike(key);
+    }
 }

@@ -2,8 +2,8 @@ package io.whileaway.apit.account.service;
 
 import io.whileaway.apit.account.entity.Developer;
 import io.whileaway.apit.account.repository.DeveloperRepository;
+import io.whileaway.apit.account.response.DeveloperIdName;
 import io.whileaway.apit.api.entity.Folder;
-import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.service.FolderService;
 import io.whileaway.apit.api.service.ProjectService;
@@ -14,12 +14,15 @@ import io.whileaway.apit.base.trial.Biss;
 import io.whileaway.apit.utils.Crypto;
 import io.whileaway.apit.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 @Service
 public class DeveloperServiceImpl implements DeveloperService {
@@ -93,6 +96,19 @@ public class DeveloperServiceImpl implements DeveloperService {
         Optional<List<Developer>> primitive = developerRepository.findByEmailOrDeveloperName(email, developerName);
         if (primitive.isEmpty() || primitive.get().isEmpty()) throw new CommonException(ControllerEnum.NOT_FOUND);
         return primitive.get();
+    }
+
+    @Override
+    public Result<List<DeveloperIdName>> findByNameOrEmailLike(String key) {
+        Pageable pageable = PageRequest.of(0, 10);
+        System.out.println(key);
+        Optional<List<Developer>> developers = developerRepository.findByEmailLikeOrDeveloperNameLike(
+                "%"+ key +"%",
+                "%"+ key +"%",
+                pageable);
+        if (developers.isEmpty())
+            throw new CommonException(ControllerEnum.NOT_FOUND);
+        return ResultUtil.success(developers.get().stream().map(DeveloperIdName::new).collect(Collectors.toList()));
     }
 
     public Result<Developer> getResult(Function<Developer,Result<Developer>> function, Developer developer, ResponseEnum responseEnum) {
