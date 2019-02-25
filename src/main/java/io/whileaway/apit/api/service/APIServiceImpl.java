@@ -1,8 +1,10 @@
 package io.whileaway.apit.api.service;
 
 import io.whileaway.apit.api.entity.API;
+import io.whileaway.apit.api.entity.Folder;
 import io.whileaway.apit.api.enums.StatusDict;
 import io.whileaway.apit.api.repository.APIRepository;
+import io.whileaway.apit.api.repository.FolderRepository;
 import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.api.specs.APISpec;
 import io.whileaway.apit.base.CommonException;
@@ -17,17 +19,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @Service
 public class APIServiceImpl implements APIService {
 
     private final APIRepository apiRepository;
-//    private final ProjectService projectService;
+    private final FolderRepository folderRepository;
 
     @Autowired
-    public APIServiceImpl(APIRepository apiRepository) {
+    public APIServiceImpl(APIRepository apiRepository, FolderRepository folderRepository) {
         this.apiRepository = apiRepository;
-//        this.projectService = projectService;
+        this.folderRepository = folderRepository;
     }
 
     @Override
@@ -66,6 +69,8 @@ public class APIServiceImpl implements APIService {
 
     @Override
     public Result<API> updateApi(API updateApi) {
+        Optional<Folder> belongFolder = folderRepository.findByFidAndStatus(updateApi.getBelongFolder(), StatusDict.NORMAL.getCode());
+        belongFolder.orElseThrow(() -> new CommonException(ControllerEnum.NOT_FOUND) );
         updateApi.setStatus(StatusDict.NORMAL.getCode());
         API data = apiRepository.save(updateApi);
         return ResultUtil.success(ControllerEnum.SUCCESS, data);

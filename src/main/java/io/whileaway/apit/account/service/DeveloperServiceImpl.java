@@ -101,13 +101,6 @@ public class DeveloperServiceImpl implements DeveloperService {
 
     /**
      * 过渡的写法
-     * @param args
-     * @param isNull
-     * @param findInDB
-     * @param convert
-     * @param <A>
-     * @param <B>
-     * @param <C>
      * @return return whatIsExists(email,
      *                 StringUtils::isEmptyOrBlank,
      *                 developerRepository::findByEmail ,

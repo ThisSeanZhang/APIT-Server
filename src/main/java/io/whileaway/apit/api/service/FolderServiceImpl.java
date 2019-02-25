@@ -112,6 +112,7 @@ public class FolderServiceImpl implements FolderService {
     }
 
     @Override
+    @Transactional
     public Result<Folder> modifyFolder(Folder folder) {
         Folder data = getFolder(folder.getFid());
         data.setParentId(folder.getParentId());
@@ -126,12 +127,7 @@ public class FolderServiceImpl implements FolderService {
         Folder folder = getFolder(fid);
         folder.setStatus(StatusDict.DELETE.getCode());
         Optional<List<Folder>> subFolder = folderRepository.findByParentId(fid);
-        if (subFolder.isPresent()) {
-            List<Folder> collect = subFolder.get().stream().peek(sub -> sub.setStatus(StatusDict.DELETE.getCode()))
-                    .collect(Collectors.toList());
-            collect.forEach( f -> System.out.println(f.toString()));
-            folderRepository.saveAll(collect);
-        }
+        subFolder.ifPresent(folders -> folders.forEach(f -> deleteFolder(f.getFid())));
         List<API> subApi;
         try {
             subApi = apiService.getByBelongFolder(fid);
