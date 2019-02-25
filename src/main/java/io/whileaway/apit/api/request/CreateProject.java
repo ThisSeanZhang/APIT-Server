@@ -1,9 +1,11 @@
 package io.whileaway.apit.api.request;
 
 import io.whileaway.apit.api.entity.Project;
+import org.hibernate.validator.constraints.Length;
 
 public class CreateProject {
 
+    @Length(max = 16, min = 4, message = "项目名称在4-16个字符之间")
     private String projectName;
     private Long projectOwner;
     private Boolean overt;
