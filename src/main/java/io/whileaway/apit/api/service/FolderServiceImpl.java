@@ -58,6 +58,7 @@ public class FolderServiceImpl implements FolderService {
                 .appendCondition(FolderSpec.folderOwnerId(filterFolder::getFolderOwnerId))
                 .appendCondition(FolderSpec.folderName(filterFolder::getFolderName))
                 .appendCondition(FolderSpec.folderParentId(filterFolder::getParentId))
+                .appendCondition(FolderSpec.statusNormal())
                 .findInDB(folderRepository::findAll)
                 .convert(Node::new);
     }
@@ -68,6 +69,7 @@ public class FolderServiceImpl implements FolderService {
         return new Spec<Folder, Node>()
                 .appendCondition(FolderSpec.belongProject(()-> belongProject))
                 .appendCondition(FolderSpec.folderParentIsNull())
+                .appendCondition(FolderSpec.statusNormal())
                 .findInDB(folderRepository::findAll)
                 .convert(Node::new);
     }
@@ -127,12 +129,20 @@ public class FolderServiceImpl implements FolderService {
         if (subFolder.isPresent()) {
             List<Folder> collect = subFolder.get().stream().peek(sub -> sub.setStatus(StatusDict.DELETE.getCode()))
                     .collect(Collectors.toList());
+            collect.forEach( f -> System.out.println(f.toString()));
             folderRepository.saveAll(collect);
         }
-        List<API> subApi = apiService.getByBelongFolder(fid);
+        List<API> subApi;
+        try {
+            subApi = apiService.getByBelongFolder(fid);
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+            subApi = new ArrayList<>();
+        }
         if (!subApi.isEmpty()) {
             List<API> collects = subApi.stream().peek(sub -> sub.setStatus(StatusDict.DELETE.getCode()))
                     .collect(Collectors.toList());
+            collects.forEach( a -> System.out.println(a.toString()));
             apiService.saveAll(collects);
         }
         return ResultUtil.success(folderRepository.save(folder));

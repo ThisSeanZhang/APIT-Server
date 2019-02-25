@@ -82,4 +82,16 @@ public class Folder {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Folder{" +
+                "fid=" + fid +
+                ", folderName='" + folderName + '\'' +
+                ", parentId=" + parentId +
+                ", folderOwnerId=" + folderOwnerId +
+                ", belongProject=" + belongProject +
+                ", status=" + status +
+                '}';
+    }
 }

@@ -133,4 +133,22 @@ public class API {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "API{" +
+                "aid=" + aid +
+                ", apiName='" + apiName + '\'' +
+                ", method='" + method + '\'' +
+                ", bewrite='" + bewrite + '\'' +
+                ", url='" + url + '\'' +
+                ", parameters='" + parameters + '\'' +
+                ", headers='" + headers + '\'' +
+                ", body='" + body + '\'' +
+                ", apiOwner=" + apiOwner +
+                ", belongFolder=" + belongFolder +
+                ", belongProject=" + belongProject +
+                ", status=" + status +
+                '}';
+    }
 }
