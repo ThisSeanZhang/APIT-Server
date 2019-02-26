@@ -1,9 +1,12 @@
 package io.whileaway.apit.api.controller;
 
+import io.whileaway.apit.account.response.DeveloperIdName;
+import io.whileaway.apit.account.service.DeveloperService;
 import io.whileaway.apit.api.PermissionType;
 import io.whileaway.apit.api.annotation.CheckProjectPermission;
 import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.request.CreateProject;
+import io.whileaway.apit.api.request.ModifyProject;
 import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.api.service.ProjectService;
 import io.whileaway.apit.base.CommonException;
@@ -14,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.util.List;
 
@@ -23,10 +25,12 @@ import java.util.List;
 public class ProjectController {
 
     private final ProjectService projectService;
+    private final DeveloperService developerService;
 
     @Autowired
-    public ProjectController(ProjectService projectService) {
+    public ProjectController(ProjectService projectService, DeveloperService developerService) {
         this.projectService = projectService;
+        this.developerService = developerService;
     }
 
     @GetMapping("/owner/{id}")
@@ -62,7 +66,17 @@ public class ProjectController {
 
     @PutMapping("/{pid}")
     @CheckProjectPermission(PermissionType.MODIFY)
-    public Result<Project> modifyProjectById (@PathVariable("pid") Long pid) {
-        return ResultUtil.success(ControllerEnum.SUCCESS, projectService.getProject(pid));
+    public Result<Project> modifyProjectById (@PathVariable("pid") Long pid, @Valid @RequestBody ModifyProject modifyProject, BindingResult bindingResult) {
+        ResultUtil.inspect(bindingResult);
+        modifyProject.setPid(pid);
+        return ResultUtil.success(projectService.modifyProject(modifyProject));
+    }
+
+    @CheckProjectPermission(PermissionType.VIEW)
+    @GetMapping("/{pid}/whoJoins")
+    public Result<List<DeveloperIdName>> getWhoJoins (@PathVariable("pid") Long pid) {
+        if (pid == null) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
+        List<DeveloperIdName> developerByIds = developerService.findDeveloperByIds(projectService.getWhoJoins(pid));
+        return ResultUtil.success(developerByIds);
     }
 }

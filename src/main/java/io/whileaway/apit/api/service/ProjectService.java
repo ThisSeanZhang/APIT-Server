@@ -1,10 +1,10 @@
 package io.whileaway.apit.api.service;
 
 import io.whileaway.apit.api.entity.Project;
+import io.whileaway.apit.api.request.ModifyProject;
 import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.base.Result;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.function.BiFunction;
 
@@ -27,4 +27,8 @@ public interface ProjectService {
     Project getProject(Long pid);
 
     Result<List<Node>> firstLayerFolder(Long pid);
+
+    List<Long> getWhoJoins(Long pid);
+
+    Project modifyProject(ModifyProject modifyProject);
 }

@@ -111,6 +111,15 @@ public class DeveloperServiceImpl implements DeveloperService {
         return ResultUtil.success(developers.get().stream().map(DeveloperIdName::new).collect(Collectors.toList()));
     }
 
+    @Override
+    public List<DeveloperIdName> findDeveloperByIds(List<Long> ids) {
+        return Optional.of(developerRepository.findAllById(ids))
+                .orElse(List.of())
+                .stream()
+                .map(DeveloperIdName::new)
+                .collect(Collectors.toList());
+    }
+
     public Result<Developer> getResult(Function<Developer,Result<Developer>> function, Developer developer, ResponseEnum responseEnum) {
         return function.apply(developer);
     }

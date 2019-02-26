@@ -21,4 +21,6 @@ public interface DeveloperService {
     List<Developer> findByEmailOrDeveloperName(String email, String developerName);
 
     Result<List<DeveloperIdName>> findByNameOrEmailLike(String key);
+
+    List<DeveloperIdName> findDeveloperByIds (List<Long> ids);
 }

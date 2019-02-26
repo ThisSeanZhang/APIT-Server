@@ -2,6 +2,7 @@ package io.whileaway.apit.api.service;
 
 import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.repository.ProjectRepository;
+import io.whileaway.apit.api.request.ModifyProject;
 import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.base.CommonException;
 import io.whileaway.apit.base.Result;
@@ -15,6 +16,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 public class ProjectServiceImpl implements ProjectService {
@@ -108,6 +111,21 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Result<List<Node>> firstLayerFolder(Long pid) {
         return folderService.firstLayerFolders(pid);
+    }
+
+    @Override
+    public List<Long> getWhoJoins(Long pid) {
+        Project project = getProject(pid);
+        return Stream.of(project.getWhoJoins().split(",")).map(Long::valueOf).collect(Collectors.toList());
+    }
+
+    @Override
+    public Project modifyProject(ModifyProject modifyProject) {
+        Project data = getProject(modifyProject.getPid());
+        data.setProjectName(modifyProject.getProjectName());
+        data.setOvert(modifyProject.getOvert());
+        data.setWhoJoins(modifyProject.getWhoJoins());
+        return projectRepository.save(data);
     }
 
 //    public static void main (String [] args) {
