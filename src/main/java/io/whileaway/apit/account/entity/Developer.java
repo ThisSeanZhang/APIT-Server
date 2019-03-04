@@ -16,6 +16,7 @@ public class Developer {
     private String email;
     @Column(length = 6, nullable = false)
     private String salt;
+    private Boolean admin;
     private Long defaultFolder;
     private Long defaultProject;
 
@@ -94,5 +95,13 @@ public class Developer {
 
     public void setSalt(String salt) {
         this.salt = salt;
+    }
+
+    public Boolean getAdmin() {
+        return admin;
+    }
+
+    public void setAdmin(Boolean admin) {
+        this.admin = admin;
     }
 }
