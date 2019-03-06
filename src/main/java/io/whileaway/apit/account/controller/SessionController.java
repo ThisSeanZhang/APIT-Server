@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @RestController
@@ -21,17 +21,19 @@ import javax.validation.Valid;
 public class SessionController {
 
     private final SessionService sessionService;
+    private final HttpSession session;
 
     @Autowired
-    public SessionController(SessionService sessionService) {
+    public SessionController(SessionService sessionService, HttpSession session) {
         this.sessionService = sessionService;
+        this.session = session;
     }
 
     @PostMapping()
-    public Result<Developer> createSession(HttpServletRequest httpServletRequest, @Valid @RequestBody CreateSession createSession, BindingResult bindingResult) {
+    public Result<Developer> createSession(@Valid @RequestBody CreateSession createSession, BindingResult bindingResult) {
         ResultUtil.inspect(bindingResult);
         Result<Developer> result = sessionService.createSession(createSession);
-        httpServletRequest.getSession().setAttribute(SessionKeyConstant.CURRENT_DEVELOPER, result.getData());
+        session.setAttribute(SessionKeyConstant.CURRENT_DEVELOPER, result.getData());
         return result;
     }
 }
