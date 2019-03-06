@@ -39,7 +39,7 @@ public class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
-    public Result<Developer> createDeveloper(Developer developer) {
+    public Optional<Developer> createDeveloper(Developer developer) {
         if (StringUtils.anyIsEmptyOrBlank(developer.getDeveloperName(), developer.getDeveloperPass(), developer.getEmail())) {
             throw new CommonException(ControllerEnum.PARAMETER_ERROR);
         }
@@ -49,46 +49,28 @@ public class DeveloperServiceImpl implements DeveloperService {
         Folder folder = folderService.createFolder(new Folder("默认文件夹", data.getDeveloperId(), project.getPid())).getData();
         data.setDefaultProject(project.getPid());
         data.setDefaultFolder(folder.getFid());
-        return ResultUtil.success(ControllerEnum.SUCCESS, developerRepository.save(data));
+        return Optional.ofNullable(developerRepository.save(data));
     }
 
     @Override
-    public Result<String> emailIsExists(String email) {
+    public Optional<String> emailIsExists(String email) {
         return new Biss<String, Developer, String>(email)
                 .inspectParam(StringUtils::isEmptyOrBlank)
                 .findInDB(developerRepository::findByEmail)
-                .convert(Developer::getDeveloperName);
+                .toOptional(Developer::getDeveloperName);
     }
 
     @Override
-    public Result<String> nameIsExists(String name) {
+    public Optional<String> nameIsExists(String name) {
         return new Biss<String, Developer, String>(name)
                 .inspectParam(StringUtils::isEmptyOrBlank)
                 .findInDB(developerRepository::findByDeveloperName)
-                .convert(Developer::getDeveloperName);
+                .toOptional(Developer::getDeveloperName);
 
 //        return new BissInspecter<String, Developer, String>(name)
 //                .inspect(StringUtils::isEmptyOrBlank)
 //                .findInDB(developerRepository::findByDeveloperName)
 //                .convert(Developer::getDeveloperName);
-    }
-
-    @Override
-    public Developer findByName(String developerName) {
-        Optional<Developer> developer = developerRepository.findByDeveloperName(developerName);
-        if (developer.isEmpty()) {
-            throw new CommonException(ControllerEnum.NOT_FOUND);
-        }
-        return developer.get();
-    }
-
-    @Override
-    public Developer findByEmail(String email) {
-        Optional<Developer> developer = developerRepository.findByEmail(email);
-        if (developer.isEmpty()) {
-            throw new CommonException(ControllerEnum.NOT_FOUND);
-        }
-        return developer.get();
     }
 
     @Override
@@ -99,7 +81,7 @@ public class DeveloperServiceImpl implements DeveloperService {
     }
 
     @Override
-    public Result<List<DeveloperIdName>> findByNameOrEmailLike(String key) {
+    public Optional<List<DeveloperIdName>> findByNameOrEmailLike(String key) {
         Pageable pageable = PageRequest.of(0, 10);
         System.out.println(key);
         Optional<List<Developer>> developers = developerRepository.findByEmailLikeOrDeveloperNameLike(
@@ -108,7 +90,7 @@ public class DeveloperServiceImpl implements DeveloperService {
                 pageable);
         if (developers.isEmpty())
             throw new CommonException(ControllerEnum.NOT_FOUND);
-        return ResultUtil.success(developers.get().stream().map(DeveloperIdName::new).collect(Collectors.toList()));
+        return Optional.of(developers.get().stream().map(DeveloperIdName::new).collect(Collectors.toList()));
     }
 
     @Override

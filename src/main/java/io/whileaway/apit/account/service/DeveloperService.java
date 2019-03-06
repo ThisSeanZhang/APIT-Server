@@ -2,25 +2,22 @@ package io.whileaway.apit.account.service;
 
 import io.whileaway.apit.account.entity.Developer;
 import io.whileaway.apit.account.response.DeveloperIdName;
-import io.whileaway.apit.base.Result;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface DeveloperService {
 
-    Result<Developer> createDeveloper(Developer developer);
+    Optional<Developer> createDeveloper(Developer developer);
 
-    Result<String> emailIsExists(String email);
+    Optional<String> emailIsExists(String email);
 
-    Result<String> nameIsExists(String name);
+    Optional<String> nameIsExists(String name);
 
-    Developer findByName(String developerName);
-
-    Developer findByEmail(String developerName);
+    Optional<List<DeveloperIdName>> findByNameOrEmailLike(String key);
 
     List<Developer> findByEmailOrDeveloperName(String email, String developerName);
 
-    Result<List<DeveloperIdName>> findByNameOrEmailLike(String key);
 
     List<DeveloperIdName> findDeveloperByIds (List<Long> ids);
 }

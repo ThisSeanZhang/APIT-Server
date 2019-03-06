@@ -37,6 +37,10 @@ public class Biss<A, B, C> {
         return new Biss<>(this.arg, targetOP.get());
     }
 
+    public Optional<C> toOptional(Function<B, C> convert) {
+        return Optional.ofNullable(convert.apply(this.target));
+    }
+
     public Result<C> convert(Function<B, C> convert) {
         return ResultUtil.success(ControllerEnum.SUCCESS, convert.apply(this.target));
     }
