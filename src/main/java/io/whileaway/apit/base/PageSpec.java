@@ -1,57 +1,63 @@
 package io.whileaway.apit.base;
 
-import io.whileaway.apit.base.enums.ControllerEnum;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
-public class Spec<A, B> {
+public class PageSpec<A, B> {
 
     final private List<Specification<A>> conditions = new ArrayList<>();
 
-    final private List<A> primitive ;
+    final private Page<A> primitive ;
 
-    private Spec(List<A> primitive) {
+    final private Pageable pageable;
+
+    private PageSpec(Page<A> primitive,Pageable pageable) {
         this.primitive = primitive;
+        this.pageable = pageable;
     }
 
-    public Spec() {
-        this.primitive = new ArrayList<>();
+    public PageSpec(Pageable pageable) {
+        this.primitive = new PageImpl<>(new ArrayList<>());
+        this.pageable = pageable;
     }
 
 
-    public Spec<A, B> findInDB (Function<Specification<A>, List<A>> findInDB) {
+    public PageSpec<A, B> findInDB (BiFunction<Specification<A>, Pageable, Page<A>> findInDB) {
         Specification<A> filterCondition = this.conditions.stream().filter(Objects::nonNull).reduce(this::andJoin).orElse(null);
-        List<A> primitive = findInDB.apply(filterCondition);
-        if (primitive.isEmpty()) {
-            throw new CommonException(ControllerEnum.NOT_FOUND);
-        }
-        return new Spec<>(primitive);
+        Page<A> primitive = findInDB.apply(filterCondition, pageable);
+        return new PageSpec<>(primitive, pageable);
     }
 
-    public Spec<A, B> findInDBUnCheck (Function<Specification<A>, List<A>> findInDB) {
-        Specification<A> filterCondition = this.conditions.stream().filter(Objects::nonNull).reduce(this::andJoin).orElse(null);
-        List<A> primitive = findInDB.apply(filterCondition);
-        return new Spec<>(primitive);
-    }
-
-    public Spec<A, B> appendCondition(Specification<A> specification) {
+    public PageSpec<A, B> appendCondition(Specification<A> specification) {
         this.conditions.add(specification);
         return this;
     }
 
-    public Result<List<B>> convert(Function<A, B> convert) {
-        return ResultUtil.success(ControllerEnum.SUCCESS, this.primitive.stream().map(convert).collect(Collectors.toList()));
+    public Page<A> nothing() {
+        return this.primitive;
     }
 
-    public Result<List<A>> doNothing() {
-        return ResultUtil.success(ControllerEnum.SUCCESS, this.primitive);
+    public Page<B> convertOtherPage(Function<A, B> convert) {
+        return new PageImpl<>(
+                convertOtherList(convert),
+                this.pageable,
+                this.primitive.getTotalElements()
+        );
+    }
+
+    public List<B> convertOtherList(Function<A, B> convert) {
+        return this.primitive.getContent().stream().map(convert).collect(Collectors.toList());
     }
 
     private Specification<A> andJoin(Specification<A> perCondition, Specification<A> condition) {

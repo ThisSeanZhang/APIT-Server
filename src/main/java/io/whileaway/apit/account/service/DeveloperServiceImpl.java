@@ -2,7 +2,9 @@ package io.whileaway.apit.account.service;
 
 import io.whileaway.apit.account.entity.Developer;
 import io.whileaway.apit.account.repository.DeveloperRepository;
+import io.whileaway.apit.account.request.FilterDeveloper;
 import io.whileaway.apit.account.response.DeveloperIdName;
+import io.whileaway.apit.account.specs.DeveloperSpec;
 import io.whileaway.apit.api.entity.Folder;
 import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.service.FolderService;
@@ -14,6 +16,7 @@ import io.whileaway.apit.base.trial.Biss;
 import io.whileaway.apit.utils.Crypto;
 import io.whileaway.apit.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -100,6 +103,16 @@ public class DeveloperServiceImpl implements DeveloperService {
                 .stream()
                 .map(DeveloperIdName::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<Developer> adminFilterFind(FilterDeveloper filterDeveloper, Pageable pageable) {
+        return new PageSpec<Developer, Developer>(pageable)
+                .appendCondition(DeveloperSpec.likeDeveloperName(filterDeveloper::getDeveloperName))
+                .appendCondition(DeveloperSpec.likeEmail(filterDeveloper::getEmail))
+                .appendCondition(DeveloperSpec.admin(filterDeveloper::getAdmin))
+                .findInDB(developerRepository::findAll)
+                .nothing();
     }
 
     public Result<Developer> getResult(Function<Developer,Result<Developer>> function, Developer developer, ResponseEnum responseEnum) {

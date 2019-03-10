@@ -2,14 +2,17 @@ package io.whileaway.apit.api.service;
 
 import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.repository.ProjectRepository;
+import io.whileaway.apit.api.request.FilterProject;
 import io.whileaway.apit.api.request.ModifyProject;
 import io.whileaway.apit.api.response.Node;
-import io.whileaway.apit.base.CommonException;
-import io.whileaway.apit.base.Result;
-import io.whileaway.apit.base.ResultUtil;
+import io.whileaway.apit.api.response.ProjectVO;
+import io.whileaway.apit.api.specs.ProjectSpec;
+import io.whileaway.apit.base.*;
 import io.whileaway.apit.base.enums.ControllerEnum;
 import io.whileaway.apit.utils.DatasBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -126,6 +129,17 @@ public class ProjectServiceImpl implements ProjectService {
         data.setOvert(modifyProject.getOvert());
         data.setWhoJoins(modifyProject.getWhoJoins());
         return projectRepository.save(data);
+    }
+
+    @Override
+    public Page<ProjectVO> adminFilterFind(FilterProject filterProject, Pageable pageable) {
+        return new PageSpec<Project, ProjectVO>(pageable)
+                .appendCondition(ProjectSpec.likeProjectName(filterProject::getProjectName))
+                .appendCondition(ProjectSpec.projectOwner(filterProject::getOwner))
+                .appendCondition(ProjectSpec.isOvert(filterProject::getOvert))
+                .appendCondition(ProjectSpec.statusNormal())
+                .findInDB(projectRepository::findAll)
+                .convertOtherPage(ProjectVO::new);
     }
 
 //    public static void main (String [] args) {
