@@ -37,4 +37,6 @@ public interface ProjectService {
     Project modifyProject(ModifyProject modifyProject);
 
     Page<ProjectVO> adminFilterFind(FilterProject filterProject, Pageable pageable);
+
+    void deleteProject(Long pid);
 }

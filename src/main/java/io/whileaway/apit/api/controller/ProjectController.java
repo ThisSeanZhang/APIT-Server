@@ -92,6 +92,13 @@ public class ProjectController {
         return ResultUtil.success(projectService.modifyProject(modifyProject));
     }
 
+    @DeleteMapping("/{pid}")
+    @CheckProjectPermission(PermissionType.MODIFY)
+    public Result<Project> deleteProjectById (@PathVariable("pid") Long pid) {
+        projectService.deleteProject(pid);
+        return ResultUtil.success();
+    }
+
     @CheckProjectPermission(PermissionType.VIEW)
     @GetMapping("/{pid}/whoJoins")
     public Result<List<DeveloperIdName>> getWhoJoins (@PathVariable("pid") Long pid) {

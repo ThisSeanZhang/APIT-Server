@@ -11,6 +11,7 @@ import io.whileaway.apit.base.CommonException;
 import io.whileaway.apit.base.Result;
 import io.whileaway.apit.base.ResultUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,7 +58,7 @@ public class DeveloperController {
         Optional<List<DeveloperIdName>> byNameOrEmailLike = developerService.findByNameOrEmailLike(key);
         if (byNameOrEmailLike.isEmpty() || byNameOrEmailLike.get().isEmpty())
             throw new CommonException(DeveloperError.NOT_FOUND);
-        return ResultUtil.success();
+        return ResultUtil.success(byNameOrEmailLike.get());
     }
 
     @GetMapping("/{did}/projects")

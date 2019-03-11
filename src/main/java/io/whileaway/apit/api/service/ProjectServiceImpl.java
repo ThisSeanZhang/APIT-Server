@@ -1,6 +1,7 @@
 package io.whileaway.apit.api.service;
 
 import io.whileaway.apit.api.entity.Project;
+import io.whileaway.apit.api.enums.StatusDict;
 import io.whileaway.apit.api.repository.ProjectRepository;
 import io.whileaway.apit.api.request.FilterProject;
 import io.whileaway.apit.api.request.ModifyProject;
@@ -141,6 +142,13 @@ public class ProjectServiceImpl implements ProjectService {
                 .appendCondition(ProjectSpec.statusNormal())
                 .findInDB(projectRepository::findAll)
                 .convertOtherPage(ProjectVO::new);
+    }
+
+    @Override
+    public void deleteProject(Long pid) {
+        Project project = getProject(pid);
+        project.setStatus(StatusDict.DELETE.getCode());
+        projectRepository.save(project);
     }
 
 //    public static void main (String [] args) {
