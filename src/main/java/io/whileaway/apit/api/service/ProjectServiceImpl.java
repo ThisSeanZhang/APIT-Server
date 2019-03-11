@@ -74,6 +74,7 @@ public class ProjectServiceImpl implements ProjectService {
 //        Optional<Developer> developer = Optional.ofNullable((Developer) request.getSession().getAttribute("currentDeveloper"));
 //        Long developerId = developer.map(Developer::getDeveloperId).orElse(null);
         Project project = getProject(projectId);
+        System.out.println(project);
         if( check.apply(project, developerId) ) {
             return true;
         }

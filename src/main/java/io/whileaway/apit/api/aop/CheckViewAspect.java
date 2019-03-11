@@ -40,6 +40,7 @@ public class CheckViewAspect {
         System.out.println("AspectJ" + Arrays.toString(joinPoint.getArgs()));
         Developer developer = getCurrentDeveloper();
         Long pid = getURITempleVariables("pid");
+        System.out.println("pid为" + pid);
         switch (checkProjectPermission.value()){
             case VIEW:
                 projectService.inspectPermission(developer.getDeveloperId(), pid, projectService::checkAllowView);

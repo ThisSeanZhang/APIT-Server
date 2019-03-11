@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 public interface DeveloperService {
@@ -22,6 +23,8 @@ public interface DeveloperService {
     List<Developer> findByEmailOrDeveloperName(String email, String developerName);
 
     List<DeveloperIdName> findDeveloperByIds (List<Long> ids);
+
+    Map<Long, String> findDeveloperByIdsToMap (List<Long> ids);
 
     Page<Developer> adminFilterFind(FilterDeveloper filterDeveloper, Pageable pageable);
 }

@@ -84,4 +84,16 @@ public class Project {
     public void setStatus(Integer status) {
         this.status = status;
     }
+
+    @Override
+    public String toString() {
+        return "Project{" +
+                "pid=" + pid +
+                ", projectName='" + projectName + '\'' +
+                ", projectOwner=" + projectOwner +
+                ", overt=" + overt +
+                ", whoJoins='" + whoJoins + '\'' +
+                ", status=" + status +
+                '}';
+    }
 }

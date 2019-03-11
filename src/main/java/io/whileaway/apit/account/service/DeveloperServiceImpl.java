@@ -22,6 +22,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -103,6 +104,12 @@ public class DeveloperServiceImpl implements DeveloperService {
                 .stream()
                 .map(DeveloperIdName::new)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Map<Long, String> findDeveloperByIdsToMap(List<Long> ids) {
+        final List<DeveloperIdName> byIds = findDeveloperByIds(ids);
+        return byIds.stream().collect(Collectors.toMap(DeveloperIdName::getId, DeveloperIdName::getName));
     }
 
     @Override
