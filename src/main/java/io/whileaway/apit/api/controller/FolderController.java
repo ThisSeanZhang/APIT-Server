@@ -54,6 +54,8 @@ public class FolderController {
     public Result<Folder> createFolder (@PathVariable("pid") Long pid,@Valid @RequestBody CreateFolder createFolder, BindingResult bindingResult) {
         ResultUtil.inspect(bindingResult);
         createFolder.setBelongProject(pid);
+        // TODO 获取项目所属的ID
+        // TODO 新建文件夹应该移动到项目的Controller中
         return folderService.createFolder(createFolder.convertToFolder());
     }
 
