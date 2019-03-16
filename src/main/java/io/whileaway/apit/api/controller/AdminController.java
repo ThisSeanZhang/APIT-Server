@@ -2,6 +2,7 @@ package io.whileaway.apit.api.controller;
 
 import io.whileaway.apit.account.entity.Developer;
 import io.whileaway.apit.account.request.FilterDeveloper;
+import io.whileaway.apit.account.request.ModifyDeveloper;
 import io.whileaway.apit.account.response.DeveloperIdName;
 import io.whileaway.apit.account.service.DeveloperService;
 import io.whileaway.apit.api.response.ProjectVO;
@@ -14,9 +15,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -52,4 +51,17 @@ public class AdminController {
     public Result<Page<Developer>> getAllDeveloper(FilterDeveloper filterDeveloper, @PageableDefault(sort = { "developerId" }) Pageable pageable) {
         return ResultUtil.success(developerService.adminFilterFind(filterDeveloper, pageable));
     }
+
+    @GetMapping("/developers/{did}")
+    public Result<Developer> getDeveloper(@PathVariable("did") Long did) {
+        return ResultUtil.success(developerService.getDeveloper(did));
+    }
+
+    @PutMapping("/developers/{did}")
+    public Result editDeveloper(@PathVariable("did") Long did, @RequestBody ModifyDeveloper modifyDeveloper) {
+        modifyDeveloper.setDeveloperId(did);
+        developerService.adminUpdate(modifyDeveloper);
+        return ResultUtil.success();
+    }
+
 }

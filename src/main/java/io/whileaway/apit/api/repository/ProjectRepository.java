@@ -11,7 +11,7 @@ import java.util.Optional;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> , JpaSpecificationExecutor<Project> {
 
-    Optional<List<Project>> findByProjectOwner(Long projectOwner);
+    Optional<Project> findByPidAndStatus(Long pid, Integer status);
 
     @Query("select p from Project p " +
             "where p.pid = :pid " +

@@ -4,6 +4,8 @@ import io.whileaway.apit.api.entity.Folder;
 import io.whileaway.apit.api.enums.StatusDict;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
+
 public class CreateFolder {
 
     @Length(max = 16, min = 4, message = "文件夹名称在4-16个字符之间")

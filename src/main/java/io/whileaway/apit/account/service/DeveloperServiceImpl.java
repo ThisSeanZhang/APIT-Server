@@ -1,8 +1,10 @@
 package io.whileaway.apit.account.service;
 
 import io.whileaway.apit.account.entity.Developer;
+import io.whileaway.apit.account.enums.error.DeveloperError;
 import io.whileaway.apit.account.repository.DeveloperRepository;
 import io.whileaway.apit.account.request.FilterDeveloper;
+import io.whileaway.apit.account.request.ModifyDeveloper;
 import io.whileaway.apit.account.response.DeveloperIdName;
 import io.whileaway.apit.account.specs.DeveloperSpec;
 import io.whileaway.apit.api.entity.Folder;
@@ -23,7 +25,9 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -49,8 +53,8 @@ public class DeveloperServiceImpl implements DeveloperService {
         }
         Crypto.cryptoDeveloperPass(developer);
         Developer data = developerRepository.save(developer);
-        Project project = projectService.createProject(new Project("默认项目", data.getDeveloperId())).getData();
-        Folder folder = folderService.createFolder(new Folder("默认文件夹", data.getDeveloperId(), project.getPid())).getData();
+        Project project = projectService.createProject(new Project("默认项目", data.getDeveloperId()));
+        Folder folder = folderService.createFolder(new Folder("默认文件夹", data.getDeveloperId(), project.getPid()));
         data.setDefaultProject(project.getPid());
         data.setDefaultFolder(folder.getFid());
         return Optional.ofNullable(developerRepository.save(data));
@@ -124,6 +128,49 @@ public class DeveloperServiceImpl implements DeveloperService {
 
     public Result<Developer> getResult(Function<Developer,Result<Developer>> function, Developer developer, ResponseEnum responseEnum) {
         return function.apply(developer);
+    }
+
+    @Override
+    public boolean inspectPermission(Long developerId, Long did, BiFunction<Developer, Long, Boolean> check) {
+//        Optional<Developer> developer = Optional.ofNullable((Developer) request.getSession().getAttribute("currentDeveloper"));
+//        Long developerId = developer.map(Developer::getDeveloperId).orElse(null);
+        Developer developer = getDeveloper(did);
+        System.out.println(developer);
+        if( check.apply(developer, developerId) ) {
+            return true;
+        }else{
+            throw new CommonException(ControllerEnum.NOT_ALLOW);
+        }
+    }
+
+    @Override
+    public boolean isPrivate(Developer project, Long developerId) {
+        boolean b = Objects.equals(project.getDeveloperId(), developerId);
+        System.out.println("Is Allow developer" + developerId + " Modify Developer:" + b);
+        return b;
+    }
+
+    @Override
+    public Developer getDeveloper(Long did) {
+        return getDeveloperUncheck(did).orElseThrow(() -> new CommonException(DeveloperError.NOT_FOUND));
+    }
+
+    @Override
+    public void adminUpdate(ModifyDeveloper modifyDeveloper) {
+        Developer developer = getDeveloper(modifyDeveloper.getDeveloperId());
+        developer.setEmail(modifyDeveloper.getEmail());
+        if (!StringUtils.isEmptyOrBlank(modifyDeveloper.getDeveloperPass())) {
+            developer.setDeveloperPass(modifyDeveloper.getDeveloperPass());
+            Crypto.cryptoDeveloperPass(developer);
+        }
+        developer.setEmail(modifyDeveloper.getEmail());
+        developer.setStatus(modifyDeveloper.getStatus());
+        developer.setAdmin(modifyDeveloper.getAdmin());
+        developerRepository.save(developer);
+    }
+
+    public Optional<Developer> getDeveloperUncheck(Long did) {
+        return developerRepository.findById(did);
     }
 
     /**

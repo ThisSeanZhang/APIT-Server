@@ -1,11 +1,16 @@
 package io.whileaway.apit.api.request;
 
 import io.whileaway.apit.api.entity.Folder;
+import org.hibernate.validator.constraints.Length;
+
+import javax.validation.constraints.NotNull;
 
 public class ModifyFolder {
     private Long fid;
+    @Length(max = 16, min = 4, message = "项目名称在4-16个字符之间")
     private String folderName;
     private Long parentId;
+    @NotNull(message = "所属的项目不能为空")
     private Long belongProject;
 
 

@@ -1,28 +1,30 @@
 package io.whileaway.apit.api.service;
 
 import io.whileaway.apit.api.entity.API;
+import io.whileaway.apit.api.request.LocationRequest;
 import io.whileaway.apit.api.response.Node;
-import io.whileaway.apit.base.Result;
 
 import java.util.List;
 
 public interface APIService {
 
-    Result<List<Node>> findByBelongFolder(Long belongFolder);
+    List<Node> findByBelongFolder(Long belongFolder);
 
-    Result<List<Node>> findFirstLayerByProjectId(Long belongProject);
+    List<Node> findFirstLayer(Long belongProject);
 
-    Result<API> findById(Long aid);
+    API findById(Long aid);
 
-    Result<API> createAPI(API api);
+    API createAPI(API api);
 
-    Result<API> updateApi(API updateApi);
+    API updateApi(API updateApi);
 
     List<API> getByBelongFolder(Long fid);
 
     void saveAll(List<API> apis);
 
-    API getById(Long aid);
+    API getApi(Long aid);
 
-    Result<API> delApi(Long aid);
+    void delApi(Long aid);
+
+    void moveApi(Long aid, LocationRequest locationRequest);
 }

@@ -1,20 +1,19 @@
-package io.whileaway.apit.account.enums.error;
+package io.whileaway.apit.api.enums.error;
 
 import io.whileaway.apit.base.enums.ResultEnum;
 
 import java.util.stream.Stream;
 
-public enum DeveloperError implements ResultEnum {
-    NOT_FOUND(404, "(っ °Д °;)っ找不到你想要的人欸"),
-    NAME_CONFLICT(409, "此用户名已经被使用了"),
+public enum  FolderError implements ResultEnum {
+    NOT_FOUND(404, "(っ °Д °;)っ找不到你想要的文件夹欸"),
     INSUFFICIENT_STORAGE(507, "创建失败"),
     PROJECT_EMPTY(404, "还没有项目诶"),
-    ;
+            ;
 
     private Integer code;
     private String message;
 
-    DeveloperError(Integer code, String message) {
+    FolderError(Integer code, String message) {
         this.code = code;
         this.message = message;
     }

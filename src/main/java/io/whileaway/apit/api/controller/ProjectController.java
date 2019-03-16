@@ -2,7 +2,7 @@ package io.whileaway.apit.api.controller;
 
 import io.whileaway.apit.account.response.DeveloperIdName;
 import io.whileaway.apit.account.service.DeveloperService;
-import io.whileaway.apit.api.PermissionType;
+import io.whileaway.apit.base.PermissionType;
 import io.whileaway.apit.api.annotation.CheckProjectPermission;
 import io.whileaway.apit.api.entity.Project;
 import io.whileaway.apit.api.request.CreateProject;
@@ -40,10 +40,11 @@ public class ProjectController {
         this.developerService = developerService;
     }
 
-    @GetMapping("/owner/{did}")
-    public Result<List<Project>> getProjectsByOwnerId (@PathVariable("did") Long id) {
-        return projectService.getProjectsByOwnerId(id);
-    }
+//    @GetMapping("/owner/{did}")
+//    public Result<List<Project>> getProjectsByOwnerId (@PathVariable("did") Long id) {
+//        List<Project> projectsByOwnerId = projectService.getProjectsByOwnerId(id);
+//        return ResultUtil.success(projectsByOwnerId);
+//    }
 
     @GetMapping("/isOvert")
     public Result<Page<ProjectVO>> getIsOvertProject (Pageable pageable) {
@@ -59,24 +60,24 @@ public class ProjectController {
     }
 
     @CheckProjectPermission(PermissionType.VIEW)
-    @GetMapping("/{pid}/content/first-layer")
+    @GetMapping("/{pid}/content/first_layer")
     public Result<List<Node>> getFirstLayerContent (@PathVariable("pid") Long pid) {
         if (pid == null) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
-        return projectService.firstLayerContent(pid);
+        return ResultUtil.checkList(projectService.firstLayerContent(pid), new CommonException(ControllerEnum.NOT_FOUND));
     }
 
     @CheckProjectPermission(PermissionType.VIEW)
-    @GetMapping("/{pid}/folders/first-layer")
+    @GetMapping("/{pid}/folders/first_layer")
     public Result<List<Node>> getFirstLayerFolder (@PathVariable("pid") Long pid) {
         if (pid == null) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
-        return projectService.firstLayerFolder(pid);
+        return ResultUtil.checkList(projectService.firstLayerFolder(pid), new CommonException(ControllerEnum.NOT_FOUND));
     }
 
-    @PostMapping
-    public Result<Project> createProject (@Valid @RequestBody CreateProject createProject, BindingResult bindingResult){
-        ResultUtil.inspect(bindingResult);
-        return projectService.createProject(createProject.convertToProject());
-    }
+//    @PostMapping
+//    public Result<Project> createProject (@Valid @RequestBody CreateProject createProject, BindingResult bindingResult){
+//        ResultUtil.inspect(bindingResult);
+//        return projectService.createProject(createProject.convertToProject());
+//    }
 
     @CheckProjectPermission(PermissionType.VIEW)
     @GetMapping("/{pid}")

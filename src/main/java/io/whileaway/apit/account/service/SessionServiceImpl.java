@@ -2,6 +2,7 @@ package io.whileaway.apit.account.service;
 
 import io.whileaway.apit.account.entity.Developer;
 import io.whileaway.apit.account.request.CreateSession;
+import io.whileaway.apit.api.enums.StatusDict;
 import io.whileaway.apit.base.CommonException;
 import io.whileaway.apit.base.Result;
 import io.whileaway.apit.base.ResultUtil;
@@ -28,6 +29,7 @@ public class SessionServiceImpl implements SessionService {
         List<Developer> developers = developerService.findByEmailOrDeveloperName(createSession.getDeveloperNameOrEmail(), createSession.getDeveloperNameOrEmail());
 
         List<Developer> targets = developers.stream()
+                .filter( developer -> developer.getStatus().equals(StatusDict.NORMAL.getCode()))
                 .filter( developer ->
                         developer.getDeveloperPass().equals(
                                 Crypto.cryptoPass(createSession.getDeveloperPass(), developer.getSalt())

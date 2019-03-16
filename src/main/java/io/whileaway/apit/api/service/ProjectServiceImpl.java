@@ -11,12 +11,12 @@ import io.whileaway.apit.api.specs.ProjectSpec;
 import io.whileaway.apit.base.*;
 import io.whileaway.apit.base.enums.ControllerEnum;
 import io.whileaway.apit.utils.DatasBuilder;
+import io.whileaway.apit.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.BiFunction;
@@ -38,36 +38,37 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Result<Project> createProject(Project project) {
-        return ResultUtil.success(ControllerEnum.SUCCESS, projectRepository.save(project));
+    public Project createProject(Project project) {
+        return projectRepository.save(project);
     }
 
     @Override
-    public Result<List<Project>> getProjectsByOwnerId(Long projectOwner) {
+    public List<Project> getProjectsByOwnerId(Long projectOwner) {
         return new DatasBuilder<Long, Project, Project>(projectOwner)
                 .inspectParam(Objects::isNull)
                 .findInDB(projectRepository::checkAllObtainProject)
-                .doNothing();
+                .original();
     }
 
     @Override
-    public Result<List<Node>> firstLayerContent(Long belongProject) {
-//        return folderService.firstLayerFolders(belongProject);
-        List<Node> nodes = new ArrayList<>();
-        List<Node> listResult = new ArrayList<>();
-        List<Node> byBelongFolder = new ArrayList<>();
+    public List<Project> filterProject(FilterProject filterProject) {
+        return new Spec<Project, ProjectVO>()
+                .appendCondition(ProjectSpec.likeProjectName(filterProject::getProjectName))
+                .appendCondition(ProjectSpec.projectOwner(filterProject::getOwner))
+                .appendCondition(ProjectSpec.whoIsJoins(filterProject::getWhoJoin))
+                .appendCondition(ProjectSpec.isOvert(filterProject::getOvert))
+                .appendCondition(ProjectSpec.statusNormal())
+                .findInDBUnCheck(projectRepository::findAll)
+                .original();
+    }
 
-        try{ listResult = folderService.firstLayerFolders(belongProject).getData(); }
-        catch (CommonException e) { System.out.println(e.getMessage()); }
-        finally { if ( !listResult.isEmpty() ) nodes.addAll(listResult); }
-
-        try{ byBelongFolder = apiService.findFirstLayerByProjectId(belongProject).getData(); }
-        catch (CommonException e) { System.out.println(e.getMessage()); }
-        finally { if ( !byBelongFolder.isEmpty() ) nodes.addAll(byBelongFolder); }
-
-        if (nodes.isEmpty())
-            throw new CommonException(ControllerEnum.NOT_FOUND);
-        return ResultUtil.success(ControllerEnum.SUCCESS, nodes);
+    @Override
+    public List<Node> firstLayerContent(Long belongProject) {
+        List<Node> firstLayerFolders = folderService.firstLayer(belongProject);
+        List<Node> firstLayerApis = apiService.findFirstLayer(belongProject);
+        firstLayerFolders.addAll(firstLayerApis);
+        firstLayerFolders.forEach(System.out::println);
+        return firstLayerFolders;
     }
 
     @Override
@@ -110,12 +111,13 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project getProject(Long pid) {
-        return projectRepository.findById(pid).orElseThrow( () -> new CommonException(ControllerEnum.NOT_FOUND) );
+        return projectRepository.findByPidAndStatus(pid, StatusDict.NORMAL.getCode())
+                .orElseThrow( () -> new CommonException(ControllerEnum.NOT_FOUND));
     }
 
     @Override
-    public Result<List<Node>> firstLayerFolder(Long pid) {
-        return folderService.firstLayerFolders(pid);
+    public List<Node> firstLayerFolder(Long pid) {
+        return folderService.firstLayer(pid);
     }
 
     @Override
@@ -129,7 +131,8 @@ public class ProjectServiceImpl implements ProjectService {
         Project data = getProject(modifyProject.getPid());
         data.setProjectName(modifyProject.getProjectName());
         data.setOvert(modifyProject.getOvert());
-        data.setWhoJoins(modifyProject.getWhoJoins());
+        data.setWhoJoins(getWhoJoins(data, modifyProject));
+
         return projectRepository.save(data);
     }
 
@@ -157,4 +160,12 @@ public class ProjectServiceImpl implements ProjectService {
 //        strings.stream().filter(s -> s.matches(patten))
 //                .forEach(System.out::println);
 //    }
+    private String getWhoJoins(Project data, ModifyProject modify) {
+        if (StringUtils.isEmptyOrBlank(modify.getWhoJoins()))
+            return String.valueOf(data.getProjectOwner());
+        return data.getProjectOwner() + "," + Stream.of(modify.getWhoJoins().split(","))
+                .filter(id -> !String.valueOf(data.getProjectOwner()).equals(id))
+                .distinct()
+                .collect(Collectors.joining(","));
+    }
 }

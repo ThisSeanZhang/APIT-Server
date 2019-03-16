@@ -1,5 +1,7 @@
 package io.whileaway.apit.account.entity;
 
+import io.whileaway.apit.api.enums.StatusDict;
+
 import javax.persistence.*;
 
 @Entity
@@ -17,6 +19,7 @@ public class Developer {
     @Column(length = 6, nullable = false)
     private String salt;
     private Boolean admin;
+    private Integer status;
     private Long defaultFolder;
     private Long defaultProject;
 
@@ -27,6 +30,8 @@ public class Developer {
         this.developerName = developerName;
         this.developerPass = developerPass;
         this.email = email;
+        this.status = StatusDict.NORMAL.getCode();
+        this.admin = false;
     }
 
     public Long getDeveloperId() {
@@ -103,5 +108,13 @@ public class Developer {
 
     public void setAdmin(Boolean admin) {
         this.admin = admin;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 }

@@ -4,7 +4,18 @@ public class FilterProject {
 
     private String projectName;
     private Long owner;
+    private Long whoJoin;
     private Boolean overt;
+
+    public FilterProject() {
+    }
+
+    public FilterProject(String projectName, Long owner, Long whoJoin, Boolean overt) {
+        this.projectName = projectName;
+        this.owner = owner;
+        this.whoJoin = whoJoin;
+        this.overt = overt;
+    }
 
     public Long getOwner() {
         return owner;
@@ -28,5 +39,13 @@ public class FilterProject {
 
     public void setProjectName(String projectName) {
         this.projectName = projectName;
+    }
+
+    public Long getWhoJoin() {
+        return whoJoin;
+    }
+
+    public void setWhoJoin(Long whoJoin) {
+        this.whoJoin = whoJoin;
     }
 }

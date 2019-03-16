@@ -12,8 +12,6 @@ import io.whileaway.apit.base.Result;
 import io.whileaway.apit.base.ResultUtil;
 import io.whileaway.apit.base.Spec;
 import io.whileaway.apit.base.enums.ControllerEnum;
-import io.whileaway.apit.base.enums.ResultEnum;
-import io.whileaway.apit.utils.DataBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,21 +35,21 @@ public class FolderServiceImpl implements FolderService {
     }
 
     @Override
-    public Result<Folder> createFolder(Folder folder) {
-        return ResultUtil.success(ControllerEnum.SUCCESS, folderRepository.save(folder));
+    public Folder createFolder(Folder folder) {
+        return folderRepository.save(folder);
     }
 
-    @Override
-    public Result<List<Node>> getFoldersNodeByProjectId(Long pid) {
-        if (Objects.isNull(pid)) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
-        return new Spec<Folder, Node>()
-                .appendCondition(FolderSpec.belongProject(()-> pid))
-                .findInDB(folderRepository::findAll)
-                .convert(Node::new);
-    }
+//    @Override
+//    public Result<List<Node>> getFoldersNodeByProjectId(Long pid) {
+//        if (Objects.isNull(pid)) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
+//        return new Spec<Folder, Node>()
+//                .appendCondition(FolderSpec.belongProject(()-> pid))
+//                .findInDB(folderRepository::findAll)
+//                .convert(Node::new);
+//    }
 
     @Override
-    public Result<List<Node>> filterFolders(FilterFolder filterFolder) {
+    public List<Node> filterFolders(FilterFolder filterFolder) {
         System.out.println(filterFolder.toString());
         return new Spec<Folder, Node>()
                 .appendCondition(FolderSpec.belongProject(filterFolder::getBelongProject))
@@ -59,38 +57,27 @@ public class FolderServiceImpl implements FolderService {
                 .appendCondition(FolderSpec.folderName(filterFolder::getFolderName))
                 .appendCondition(FolderSpec.folderParentId(filterFolder::getParentId))
                 .appendCondition(FolderSpec.statusNormal())
-                .findInDB(folderRepository::findAll)
-                .convert(Node::new);
+                .findInDBUnCheck(folderRepository::findAll)
+                .convertOther(Node::new);
     }
 
     @Override
-    public Result<List<Node>> firstLayerFolders(Long belongProject) {
+    public List<Node> firstLayer(Long belongProject) {
         if (Objects.isNull(belongProject) ) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
         return new Spec<Folder, Node>()
                 .appendCondition(FolderSpec.belongProject(()-> belongProject))
                 .appendCondition(FolderSpec.folderParentIsNull())
                 .appendCondition(FolderSpec.statusNormal())
-                .findInDB(folderRepository::findAll)
-                .convert(Node::new);
+                .findInDBUnCheck(folderRepository::findAll)
+                .convertOther(Node::new);
     }
 
     @Override
-    public Result<List<Node>> folderContent(FilterFolder filterFolder) {
-        List<Node> nodes = new ArrayList<>();
-        List<Node> listResult = new ArrayList<>();
-        List<Node> byBelongFolder = new ArrayList<>();
-
-        try{ listResult = filterFolders(filterFolder).getData(); }
-        catch (CommonException e) { System.out.println(e.getMessage()); }
-        finally { if ( !listResult.isEmpty() ) nodes.addAll(listResult); }
-
-        try{ byBelongFolder = apiService.findByBelongFolder(filterFolder.getParentId()).getData(); }
-        catch (CommonException e) { System.out.println(e.getMessage()); }
-        finally { if ( !byBelongFolder.isEmpty() ) nodes.addAll(byBelongFolder); }
-
-        if (nodes.isEmpty())
-            throw new CommonException(ControllerEnum.NOT_FOUND);
-        return ResultUtil.success(ControllerEnum.SUCCESS, nodes);
+    public List<Node> folderContent(FilterFolder filterFolder) {
+        List<Node> folders = filterFolders(filterFolder);
+        List<Node> apis = apiService.findByBelongFolder(filterFolder.getParentId());
+        folders.addAll(apis);
+        return folders;
     }
 
     @Override
@@ -115,7 +102,13 @@ public class FolderServiceImpl implements FolderService {
     @Transactional
     public Result<Folder> modifyFolder(Folder folder) {
         Folder data = getFolder(folder.getFid());
-        data.setParentId(folder.getParentId());
+        Long parentId = null;
+        if (Objects.nonNull(folder.getParentId())) {
+            parentId = getFolderUncheck(folder.getParentId())
+                    .orElseThrow(() -> new CommonException(ControllerEnum.NOT_FOUND))
+                    .getFid();
+        }
+        data.setParentId(parentId);
         data.setBelongProject(folder.getBelongProject());
         data.setFolderName(folder.getFolderName());
         return ResultUtil.success(folderRepository.save(data));
@@ -144,7 +137,13 @@ public class FolderServiceImpl implements FolderService {
         return ResultUtil.success(folderRepository.save(folder));
     }
 
-    private Folder getFolder(Long id) {
-        return folderRepository.findById(id).orElseThrow(()->new CommonException(ControllerEnum.NOT_FOUND));
+    @Override
+    public Folder getFolder(Long id) {
+        return getFolderUncheck(id).orElseThrow(()->new CommonException(ControllerEnum.NOT_FOUND));
+    }
+
+    @Override
+    public Optional<Folder> getFolderUncheck(Long id) {
+        return folderRepository.findByFidAndStatus(id, StatusDict.NORMAL.getCode());
     }
 }
