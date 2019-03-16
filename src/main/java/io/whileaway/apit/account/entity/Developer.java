@@ -24,6 +24,7 @@ public class Developer {
     private Long defaultProject;
 
     public Developer() {
+        this.admin = false;
     }
 
     public Developer(String developerName, String developerPass, String email) {

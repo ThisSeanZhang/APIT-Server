@@ -74,6 +74,7 @@ public class FolderServiceImpl implements FolderService {
 
     @Override
     public List<Node> folderContent(FilterFolder filterFolder) {
+        filterFolder.setBelongProject(null); // 暂时不使用项目ID进行筛选
         List<Node> folders = filterFolders(filterFolder);
         List<Node> apis = apiService.findByBelongFolder(filterFolder.getParentId());
         folders.addAll(apis);

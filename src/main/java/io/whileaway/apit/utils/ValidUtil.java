@@ -13,6 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Component
@@ -32,7 +33,7 @@ public class ValidUtil {
         if (Objects.nonNull(currentDeveloper) && currentDeveloper instanceof Developer) {
             return (Developer) currentDeveloper;
         }
-        throw new CommonException(ControllerEnum.UNAUTHORIZED);
+        return new Developer();
     }
 
     public Long getURITempleVariables (String key) {

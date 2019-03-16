@@ -89,7 +89,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public boolean checkAllowModifyProject(Project project, Long developerId) {
-        boolean b = Objects.equals(project.getProjectOwner(), developerId);
+        boolean b = Objects.nonNull(developerId) && Objects.equals(project.getProjectOwner(), developerId);
         System.out.println("Is Allow developer" + developerId + " Modify Project:" + b + "for project " + project.getPid());
         return b;
     }
