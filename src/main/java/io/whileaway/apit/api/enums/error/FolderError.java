@@ -8,6 +8,7 @@ public enum  FolderError implements ResultEnum {
     NOT_FOUND(404, "(っ °Д °;)っ找不到你想要的文件夹欸"),
     INSUFFICIENT_STORAGE(507, "创建失败"),
     PROJECT_EMPTY(404, "还没有项目诶"),
+    NOT_ALLOW_SELF_FATHER(400,"(→_→)自己不能做自己的父文件夹的,这是会报错的")
             ;
 
     private Integer code;

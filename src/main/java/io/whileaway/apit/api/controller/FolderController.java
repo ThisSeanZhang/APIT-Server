@@ -1,5 +1,6 @@
 package io.whileaway.apit.api.controller;
 
+import io.whileaway.apit.api.enums.error.FolderError;
 import io.whileaway.apit.api.service.ProjectService;
 import io.whileaway.apit.base.CommonException;
 import io.whileaway.apit.base.PermissionType;
@@ -86,6 +87,7 @@ public class FolderController {
                                         @Valid @RequestBody ModifyFolder modifyFolder,
                                         BindingResult bindingResult) {
         if (Objects.isNull(fid)) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
+        if (fid.equals(modifyFolder.getParentId())) throw new CommonException(FolderError.NOT_ALLOW_SELF_FATHER);
         ResultUtil.inspect(bindingResult);
         modifyFolder.setFid(fid);
         projectService.inspectPermission(

@@ -163,9 +163,10 @@ public class ProjectServiceImpl implements ProjectService {
     private String getWhoJoins(Project data, ModifyProject modify) {
         if (StringUtils.isEmptyOrBlank(modify.getWhoJoins()))
             return String.valueOf(data.getProjectOwner());
-        return data.getProjectOwner() + "," + Stream.of(modify.getWhoJoins().split(","))
+        String str = Stream.of(modify.getWhoJoins().split(","))
                 .filter(id -> !String.valueOf(data.getProjectOwner()).equals(id))
                 .distinct()
                 .collect(Collectors.joining(","));
+        return StringUtils.isEmptyOrBlank(str) ? String.valueOf(data.getProjectOwner()) :  data.getProjectOwner() + "," + str;
     }
 }
