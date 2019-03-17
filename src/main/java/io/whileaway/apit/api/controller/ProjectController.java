@@ -86,7 +86,7 @@ public class ProjectController {
     }
 
     @PutMapping("/{pid}")
-    @CheckProjectPermission(PermissionType.MODIFY)
+    @CheckProjectPermission(PermissionType.DELETE)
     public Result<Project> modifyProjectById (@PathVariable("pid") Long pid, @Valid @RequestBody ModifyProject modifyProject, BindingResult bindingResult) {
         ResultUtil.inspect(bindingResult);
         modifyProject.setPid(pid);

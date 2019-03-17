@@ -39,8 +39,11 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project createProject(Project project) {
+        project.setWhoJoins(getWhoJoins(project.getProjectOwner(), project.getWhoJoins()));
         return projectRepository.save(project);
     }
+
+
 
     @Override
     public List<Project> getProjectsByOwnerId(Long projectOwner) {
@@ -161,12 +164,16 @@ public class ProjectServiceImpl implements ProjectService {
 //                .forEach(System.out::println);
 //    }
     private String getWhoJoins(Project data, ModifyProject modify) {
-        if (StringUtils.isEmptyOrBlank(modify.getWhoJoins()))
-            return String.valueOf(data.getProjectOwner());
-        String str = Stream.of(modify.getWhoJoins().split(","))
-                .filter(id -> !String.valueOf(data.getProjectOwner()).equals(id))
+        return getWhoJoins(data.getProjectOwner(), modify.getWhoJoins());
+    }
+
+    private String getWhoJoins(Long ownerId, String whoJoin) {
+        if (StringUtils.isEmptyOrBlank(whoJoin))
+            return String.valueOf(ownerId);
+        String str = Stream.of(whoJoin.split(","))
+                .filter(id -> !String.valueOf(ownerId).equals(id))
                 .distinct()
                 .collect(Collectors.joining(","));
-        return StringUtils.isEmptyOrBlank(str) ? String.valueOf(data.getProjectOwner()) :  data.getProjectOwner() + "," + str;
+        return StringUtils.isEmptyOrBlank(str) ? String.valueOf(ownerId) :  ownerId + "," + str;
     }
 }
