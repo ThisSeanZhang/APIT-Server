@@ -3,6 +3,7 @@ package io.whileaway.apit.api.service;
 import io.whileaway.apit.api.entity.API;
 import io.whileaway.apit.api.entity.Folder;
 import io.whileaway.apit.api.enums.StatusDict;
+import io.whileaway.apit.api.enums.error.FolderError;
 import io.whileaway.apit.api.repository.FolderRepository;
 import io.whileaway.apit.api.request.FilterFolder;
 import io.whileaway.apit.api.response.Node;
@@ -103,16 +104,21 @@ public class FolderServiceImpl implements FolderService {
     @Transactional
     public Result<Folder> modifyFolder(Folder folder) {
         Folder data = getFolder(folder.getFid());
-        Long parentId = null;
-        if (Objects.nonNull(folder.getParentId())) {
-            parentId = getFolderUncheck(folder.getParentId())
-                    .orElseThrow(() -> new CommonException(ControllerEnum.NOT_FOUND))
-                    .getFid();
-        }
-        data.setParentId(parentId);
+        data.setParentId(inspectParent(data, folder.getParentId()));
         data.setBelongProject(folder.getBelongProject());
         data.setFolderName(folder.getFolderName());
         return ResultUtil.success(folderRepository.save(data));
+    }
+
+    private Long inspectParent(Folder folder, Long parentFolder) {
+        Long parentId = parentFolder;
+        while(Objects.nonNull(parentId)) {
+            parentId = getFolder(parentId).getParentId();
+            if (folder.getFid().equals(parentId)) {
+                throw new CommonException(FolderError.NOT_ALLOW_SON_BE_FATHER);
+            }
+        }
+        return parentFolder;
     }
 
     @Override

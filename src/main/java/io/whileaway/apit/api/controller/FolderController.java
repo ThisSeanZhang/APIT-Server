@@ -88,6 +88,7 @@ public class FolderController {
                                         BindingResult bindingResult) {
         if (Objects.isNull(fid)) throw new CommonException(ControllerEnum.PARAMETER_ERROR);
         if (fid.equals(modifyFolder.getParentId())) throw new CommonException(FolderError.NOT_ALLOW_SELF_FATHER);
+        if (Objects.isNull(modifyFolder.getBelongProject())) throw new CommonException(FolderError.FOLDER_MUST_HAVE_BELONG_FOLDER);
         ResultUtil.inspect(bindingResult);
         modifyFolder.setFid(fid);
         projectService.inspectPermission(
