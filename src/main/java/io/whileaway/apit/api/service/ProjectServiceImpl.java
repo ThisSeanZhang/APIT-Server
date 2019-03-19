@@ -160,7 +160,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void leafProject(Long did, Long pid) {
         Project project = getProject(pid);
-        project.setWhoJoins(developerLeafProject(project,pid));
+        project.setWhoJoins(developerLeafProject(project,did));
         projectRepository.save(project);
     }
 
