@@ -94,7 +94,7 @@ public class ProjectController {
     }
 
     @DeleteMapping("/{pid}")
-    @CheckProjectPermission(PermissionType.MODIFY)
+    @CheckProjectPermission(PermissionType.DELETE)
     public Result<Project> deleteProjectById (@PathVariable("pid") Long pid) {
         projectService.deleteProject(pid);
         return ResultUtil.success();

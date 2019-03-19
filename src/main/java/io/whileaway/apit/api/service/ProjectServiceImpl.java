@@ -157,12 +157,26 @@ public class ProjectServiceImpl implements ProjectService {
         projectRepository.save(project);
     }
 
-//    public static void main (String [] args) {
+    @Override
+    public void leafProject(Long did, Long pid) {
+        Project project = getProject(pid);
+        project.setWhoJoins(developerLeafProject(project,pid));
+        projectRepository.save(project);
+    }
+
+    //    public static void main (String [] args) {
 //        List<String> strings = List.of("1", "1,", "1,11,12", "11,1,12", "11,12,1", "11,11,11");
 //        String patten = "^(.*,)?" + 12 + "(,.*)?$";
 //        strings.stream().filter(s -> s.matches(patten))
 //                .forEach(System.out::println);
 //    }
+
+    private String developerLeafProject(Project data, Long did) {
+        return Stream.of(data.getWhoJoins().split(","))
+                .filter(id -> !String.valueOf(did).equals(id))
+                .distinct()
+                .collect(Collectors.joining(","));
+    }
     private String getWhoJoins(Project data, ModifyProject modify) {
         return getWhoJoins(data.getProjectOwner(), modify.getWhoJoins());
     }

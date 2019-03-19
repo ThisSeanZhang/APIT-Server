@@ -82,6 +82,15 @@ public class DeveloperController {
         return ResultUtil.success(projectService.createProject(createProject.convertToProject()));
     }
 
+    @DeleteMapping("/{did}/projects/{pid}")
+    @ValidDeveloper(PermissionType.SELF)
+    public Result<Project> leafProject(
+            @PathVariable("did") Long did,
+            @PathVariable("pid") Long pid){
+        projectService.leafProject(did, pid);
+        return ResultUtil.success();
+    }
+
     @GetMapping("/{did}/projects/overt")
     public Result<List<Project>> findDevelopersOvertProjects(@PathVariable("did") Long did){
         return ResultUtil.checkList(projectService.filterProject(new FilterProject(null, null, did, true)), new CommonException(DeveloperError.PROJECT_EMPTY));

@@ -40,4 +40,6 @@ public interface ProjectService {
     Page<ProjectVO> adminFilterFind(FilterProject filterProject, Pageable pageable);
 
     void deleteProject(Long pid);
+
+    void leafProject(Long did, Long pid);
 }
