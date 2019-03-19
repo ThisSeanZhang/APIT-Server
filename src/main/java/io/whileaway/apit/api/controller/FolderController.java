@@ -99,7 +99,7 @@ public class FolderController {
     }
 
     @DeleteMapping("/{fid}")
-    @CheckProjectPermission(PermissionType.DELETE)
+    @CheckProjectPermission(PermissionType.MODIFY)
     public Result<Folder> modifyFolder (@PathVariable("fid") Long fid) {
         return folderService.deleteFolder(fid);
     }
