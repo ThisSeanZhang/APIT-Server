@@ -32,18 +32,24 @@ public class ProjectSpec {
     public static<A> Specification<A> whoIsJoins(Supplier<Long> supplier) {
         if (Objects.isNull(supplier.get())) return null;
         return ((Specification<A>) (root, query, builder) ->
-                builder.like(root.get("whoJoins"), supplier.get() + "%"))
+                builder.like(root.get("whoJoins"), supplier.get() + ",%"))
                 .or(whoIsJoins1(supplier))
-                .or(whoIsJoins2(supplier));
+                .or(whoIsJoins2(supplier))
+                .or(whoIsJoins3(supplier));
+    }
+
+    private static<A> Specification<A> whoIsJoins3(Supplier<Long> supplier) {
+        if (Objects.isNull(supplier.get())) return null;
+        return Spec.equal("whoJoins", Objects::isNull, supplier);
     }
 
     private static<A> Specification<A> whoIsJoins2(Supplier<Long> supplier) {
         if (Objects.isNull(supplier.get())) return null;
-        return Spec.like("whoJoins", "%" + supplier.get());
+        return Spec.like("whoJoins", "%," + supplier.get());
     }
 
     private static<A> Specification<A> whoIsJoins1(Supplier<Long> supplier) {
-        return Spec.like("whoJoins", "%" + supplier.get() + "%");
+        return Spec.like("whoJoins", "%," + supplier.get() + ",%");
     }
 
 
