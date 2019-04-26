@@ -1,7 +1,8 @@
 package io.whileaway.apit.api.controller;
 
-import io.whileaway.apit.api.entity.Folder;
 import io.whileaway.apit.api.enums.error.FolderError;
+import io.whileaway.apit.api.request.EditAPIResponseExample;
+import io.whileaway.apit.api.request.EditAPIResponseParams;
 import io.whileaway.apit.api.request.LocationRequest;
 import io.whileaway.apit.api.service.FolderService;
 import io.whileaway.apit.api.service.ProjectService;
@@ -93,5 +94,31 @@ public class APIController {
 
         apiService.moveApi(aid, locationRequest);
         return ResultUtil.success();
+    }
+
+    @PutMapping("/{aid}/response_example")
+    public Result editResponseExample (@PathVariable("aid") Long aid, @RequestBody EditAPIResponseExample editAPIResponseExample) {
+        editAPIResponseExample.setAid(aid);
+        apiService.updateResponseExample(editAPIResponseExample);
+        return  ResultUtil.success();
+    }
+
+    @GetMapping("/{aid}/response_example")
+    public Result getResponseExample (@PathVariable("aid") Long aid) {
+        API api = apiService.getApi(aid);
+        return  ResultUtil.success(api.getResponseExample());
+    }
+
+    @PutMapping("/{aid}/example_params")
+    public Result editResponseExampleParams (@PathVariable("aid") Long aid, @RequestBody EditAPIResponseParams editAPIResponseParams) {
+        editAPIResponseParams.setAid(aid);
+        apiService.updateResponseParams(editAPIResponseParams);
+        return  ResultUtil.success();
+    }
+
+    @GetMapping("/{aid}/example_params")
+    public Result getResponseExampleParams (@PathVariable("aid") Long aid) {
+        API api = apiService.getApi(aid);
+        return  ResultUtil.success(api.getExampleParams());
     }
 }

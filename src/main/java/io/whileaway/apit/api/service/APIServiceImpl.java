@@ -3,6 +3,8 @@ package io.whileaway.apit.api.service;
 import io.whileaway.apit.api.entity.API;
 import io.whileaway.apit.api.enums.StatusDict;
 import io.whileaway.apit.api.repository.APIRepository;
+import io.whileaway.apit.api.request.EditAPIResponseExample;
+import io.whileaway.apit.api.request.EditAPIResponseParams;
 import io.whileaway.apit.api.request.LocationRequest;
 import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.api.specs.APISpec;
@@ -82,7 +84,7 @@ public class APIServiceImpl implements APIService {
                 .orElseThrow(() -> new CommonException(ControllerEnum.NOT_FOUND));
     }
 
-    public Optional<API> getApiUnCheck(Long aid) {
+    private Optional<API> getApiUnCheck(Long aid) {
         return apiRepository.findByAidAndStatus(aid, StatusDict.NORMAL.getCode());
     }
 
@@ -98,6 +100,20 @@ public class APIServiceImpl implements APIService {
         API api = getApi(aid);
         api.setBelongFolder(locationRequest.getBelongFolder());
         api.setBelongProject(locationRequest.getBelongProject());
+        apiRepository.save(api);
+    }
+
+    @Override
+    public void updateResponseExample(EditAPIResponseExample editAPIResponseExample) {
+        API api = getApi(editAPIResponseExample.getAid());
+        api.setResponseExample(editAPIResponseExample.getResponseExample());
+        apiRepository.save(api);
+    }
+
+    @Override
+    public void updateResponseParams(EditAPIResponseParams editAPIResponseParams) {
+        API api = getApi(editAPIResponseParams.getAid());
+        api.setExampleParams(editAPIResponseParams.getParams());
         apiRepository.save(api);
     }
 

@@ -20,6 +20,10 @@ public class API {
     private String headers;
     @Column(columnDefinition="text")
     private String body;
+    @Column(columnDefinition="text")
+    private String responseExample;
+    @Column(columnDefinition="text")
+    private String exampleParams;
     private Long apiOwner;
     private Long belongFolder;
     private Long belongProject;
@@ -134,6 +138,22 @@ public class API {
         this.status = status;
     }
 
+    public String getResponseExample() {
+        return responseExample;
+    }
+
+    public void setResponseExample(String responseExample) {
+        this.responseExample = responseExample;
+    }
+
+    public String getExampleParams() {
+        return exampleParams;
+    }
+
+    public void setExampleParams(String exampleParams) {
+        this.exampleParams = exampleParams;
+    }
+
     @Override
     public String toString() {
         return "API{" +
@@ -145,6 +165,8 @@ public class API {
                 ", parameters='" + parameters + '\'' +
                 ", headers='" + headers + '\'' +
                 ", body='" + body + '\'' +
+                ", responseExample='" + responseExample + '\'' +
+                ", exampleParams='" + exampleParams + '\'' +
                 ", apiOwner=" + apiOwner +
                 ", belongFolder=" + belongFolder +
                 ", belongProject=" + belongProject +

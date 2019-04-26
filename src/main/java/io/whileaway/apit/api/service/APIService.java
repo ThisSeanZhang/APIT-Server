@@ -1,6 +1,8 @@
 package io.whileaway.apit.api.service;
 
 import io.whileaway.apit.api.entity.API;
+import io.whileaway.apit.api.request.EditAPIResponseExample;
+import io.whileaway.apit.api.request.EditAPIResponseParams;
 import io.whileaway.apit.api.request.LocationRequest;
 import io.whileaway.apit.api.response.Node;
 
@@ -27,4 +29,8 @@ public interface APIService {
     void delApi(Long aid);
 
     void moveApi(Long aid, LocationRequest locationRequest);
+
+    void updateResponseExample(EditAPIResponseExample editAPIResponseExample);
+
+    void updateResponseParams(EditAPIResponseParams editAPIResponseParams);
 }
