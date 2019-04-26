@@ -55,7 +55,7 @@ COPY ./$SERVER_CONF $RUN_DIR/
 EXPOSE 80
 
 #运行
-CMD ["java", "-jar", "-Dspring.profiles.active=prod", "./APIT-Server-v0.1-alpha.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "./APIT-Server-v0.0.2-beta.jar"]
 ```
 #### 完(后续再添加吧)
 
