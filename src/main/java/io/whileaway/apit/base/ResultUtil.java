@@ -3,7 +3,10 @@ package io.whileaway.apit.base;
 import io.whileaway.apit.base.enums.ControllerEnum;
 import org.springframework.validation.BindingResult;
 
+import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,10 +39,20 @@ public class ResultUtil {
         return success(controllerEnum.getCode(), controllerEnum.getMessage(), data);
     }
 
-    public static<T> Result<T> success(ControllerEnum controllerEnum) {
-        return success(controllerEnum.getCode(), controllerEnum.getMessage(), null);
+    public static<T> Result<T> success(T data) {
+        return success(ControllerEnum.SUCCESS.getCode(), ControllerEnum.SUCCESS.getMessage(), data);
     }
 
+    public static<T> Result<T> success() {
+        return success(ControllerEnum.SUCCESS, null);
+    }
+
+    public static<T> Result<List<T>> checkList(List<T> data, CommonException exception) {
+        if (Objects.isNull(data) || data.isEmpty()) {
+            throw exception;
+        }
+        return success(ControllerEnum.SUCCESS.getCode(), ControllerEnum.SUCCESS.getMessage(), data);
+    }
 
     public static void inspect(BindingResult bindingResult) {
         if (!bindingResult.hasErrors()) {

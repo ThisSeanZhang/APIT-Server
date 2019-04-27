@@ -20,7 +20,6 @@ public class CreateAPI {
     private String body;
     @NotNull(message="需要指定所属人")
     private Long apiOwner;
-    @NotNull(message="需要指定所属的文件夹")
     private Long belongFolder;
     @NotNull(message="需要指定所属的项目")
     private Long belongProject;

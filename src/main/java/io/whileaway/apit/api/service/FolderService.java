@@ -6,16 +6,27 @@ import io.whileaway.apit.api.response.Node;
 import io.whileaway.apit.base.Result;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface FolderService {
 
-    Result<Folder> createFolder(Folder folder);
+    Folder createFolder(Folder folder);
 
-    Result<List<Node>> getFoldersNodeByProjectId (Long pid);
+    List<Node> filterFolders(FilterFolder filterFolder);
 
-    Result<List<Node>> filterFolders(FilterFolder filterFolder);
+    List<Node> firstLayer(Long belongProject);
 
-    Result<List<Node>> firstLayerFolders(Long belongProject, Long folderOwnerId);
+    List<Node> folderContent(FilterFolder filterFolder);
 
-    Result<List<Node>> folderContent(FilterFolder filterFolder);
+    Result<List<Node>> subFolders(FilterFolder filterFolder);
+
+    Result<Folder> findFolderById(Long fid);
+
+    Result<Folder> modifyFolder(Folder convertToFolder);
+
+    Result<Folder> deleteFolder(Long fid);
+
+    Folder getFolder(Long id);
+
+    Optional<Folder> getFolderUncheck(Long id);
 }

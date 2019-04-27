@@ -85,7 +85,7 @@ public class DeveloperControllerTest {
                 .get("/developers/developer-name/" + developer.getDeveloperName()))
                 .andReturn();
         int status = result.getResponse().getStatus();
-        Assert.assertEquals(200, status);
+        Assert.assertEquals(409, status);
     }
 
     @Test

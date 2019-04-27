@@ -26,12 +26,18 @@ public class Spec<A, B> {
     }
 
 
-    public Spec<A, B> findInDB (Function<Specification<A>, List<A>> findInDB) {
+//    public Spec<A, B> findInDB (Function<Specification<A>, List<A>> findInDB) {
+//        Specification<A> filterCondition = this.conditions.stream().filter(Objects::nonNull).reduce(this::andJoin).orElse(null);
+//        List<A> primitive = findInDB.apply(filterCondition);
+//        if (primitive.isEmpty()) {
+//            throw new CommonException(ControllerEnum.NOT_FOUND);
+//        }
+//        return new Spec<>(primitive);
+//    }
+
+    public Spec<A, B> findInDBUnCheck (Function<Specification<A>, List<A>> findInDB) {
         Specification<A> filterCondition = this.conditions.stream().filter(Objects::nonNull).reduce(this::andJoin).orElse(null);
         List<A> primitive = findInDB.apply(filterCondition);
-        if (primitive.isEmpty()) {
-            throw new CommonException(ControllerEnum.NOT_FOUND);
-        }
         return new Spec<>(primitive);
     }
 
@@ -42,6 +48,13 @@ public class Spec<A, B> {
 
     public Result<List<B>> convert(Function<A, B> convert) {
         return ResultUtil.success(ControllerEnum.SUCCESS, this.primitive.stream().map(convert).collect(Collectors.toList()));
+    }
+    public List<B> convertOther(Function<A, B> convert) {
+        return this.primitive.stream().map(convert).collect(Collectors.toList());
+    }
+
+    public List<A> original() {
+        return this.primitive;
     }
 
     public Result<List<A>> doNothing() {
@@ -62,5 +75,15 @@ public class Spec<A, B> {
 
     public static<B> Specification<B> isNull(String paramName) {
         return (root, query, builder) -> builder.isNull(root.get(paramName));
+    }
+
+    public static<T, B> Specification<B> like(String paramName, Predicate<T> predicate, Supplier<T> supplier) {
+        return predicate.test(supplier.get())
+                ? null
+                : (root, query, builder) -> builder.like(root.get(paramName), "%"+supplier.get()+"%");
+    }
+
+    public static<B> Specification<B> like(String paramName, String supplier) {
+        return (root, query, builder) -> builder.like(root.get(paramName), supplier );
     }
 }

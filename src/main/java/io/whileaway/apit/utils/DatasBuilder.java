@@ -46,4 +46,6 @@ public class DatasBuilder<A, B, C> {
     public Result<List<B>> doNothing() {
         return ResultUtil.success(ControllerEnum.SUCCESS, this.target);
     }
+
+    public List<B> original () { return this.target; }
 }
