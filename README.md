@@ -45,7 +45,7 @@ ENV RUN_DIR /root
 WORKDIR /root
 
 #定义初始化sql文件
-ENV SERVER_JAR APIT-Server-v0.0.2-beta.jar
+ENV SERVER_JAR APIT-Server-0.0.2-beta.jar
 ENV SERVER_CONF application-prod.yml
 
 #拷贝文件
@@ -55,7 +55,7 @@ COPY ./$SERVER_CONF $RUN_DIR/
 EXPOSE 80
 
 #运行
-CMD ["java", "-jar", "-Dspring.profiles.active=prod", "./APIT-Server-v0.0.2-beta.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "./APIT-Server-0.0.2-beta.jar"]
 ```
 #### 完(后续再添加吧)
 
