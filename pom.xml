@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>io.whileaway</groupId>
 	<artifactId>APIT-Server</artifactId>
-	<version>v0.0.2-beta</version>
+	<version>0.0.2-beta</version>
 	<name>APIT-Server</name>
 	<description>APIT Server</description>
 

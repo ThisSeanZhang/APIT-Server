@@ -16,7 +16,7 @@ job_deploy:
   image: docker:stable
   script:
     - pwd
-    - cp /root/.m2/repository/io/whileaway/APIT-Server/v0.0.2-beta/APIT-Server-v0.0.2-beta.jar ./APIT-Server-v0.0.2-beta.jar
+    - cp /root/.m2/repository/io/whileaway/APIT-Server/0.0.2-beta/APIT-Server-0.0.2-beta.jar ./APIT-Server-0.0.2-beta.jar
     - ls -la
     - if [ $(docker ps -aq --filter name=apit_server) ]; then docker rm -f apit_server;fi
     - if [ $(docker images -aq --filter=reference='apit_server:0.0.2') ]; then docker rmi apit_server:0.0.2;fi
