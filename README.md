@@ -29,7 +29,7 @@ spring:
 ```
 #### 然后运行
 ```$xslt
-$ java -jar -Dspring.profiles.active=prod ./APIT-Server-v0.0.2-beta.jar
+$ java -jar -Dspring.profiles.active=prod ./APIT-Server-0.0.2-beta.jar
 ```
 > 或者使用Docker
 
