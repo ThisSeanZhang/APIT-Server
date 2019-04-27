@@ -1,5 +1,7 @@
 package io.whileaway.apit.api.entity;
 
+import io.whileaway.apit.api.enums.StatusDict;
+
 import javax.persistence.*;
 
 @Entity
@@ -18,9 +20,14 @@ public class API {
     private String headers;
     @Column(columnDefinition="text")
     private String body;
+    @Column(columnDefinition="text")
+    private String responseExample;
+    @Column(columnDefinition="text")
+    private String exampleParams;
     private Long apiOwner;
     private Long belongFolder;
     private Long belongProject;
+    private Integer status;
 
     public API(String apiName, String method, String url, Long apiOwner, Long belongFolder, Long belongProject) {
         this.apiName = apiName;
@@ -29,6 +36,7 @@ public class API {
         this.apiOwner = apiOwner;
         this.belongFolder = belongFolder;
         this.belongProject = belongProject;
+        this.status = StatusDict.NORMAL.getCode();
     }
 
     public API() {
@@ -120,5 +128,49 @@ public class API {
 
     public void setApiName(String apiName) {
         this.apiName = apiName;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public String getResponseExample() {
+        return responseExample;
+    }
+
+    public void setResponseExample(String responseExample) {
+        this.responseExample = responseExample;
+    }
+
+    public String getExampleParams() {
+        return exampleParams;
+    }
+
+    public void setExampleParams(String exampleParams) {
+        this.exampleParams = exampleParams;
+    }
+
+    @Override
+    public String toString() {
+        return "API{" +
+                "aid=" + aid +
+                ", apiName='" + apiName + '\'' +
+                ", method='" + method + '\'' +
+                ", bewrite='" + bewrite + '\'' +
+                ", url='" + url + '\'' +
+                ", parameters='" + parameters + '\'' +
+                ", headers='" + headers + '\'' +
+                ", body='" + body + '\'' +
+                ", responseExample='" + responseExample + '\'' +
+                ", exampleParams='" + exampleParams + '\'' +
+                ", apiOwner=" + apiOwner +
+                ", belongFolder=" + belongFolder +
+                ", belongProject=" + belongProject +
+                ", status=" + status +
+                '}';
     }
 }

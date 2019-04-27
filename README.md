@@ -11,7 +11,7 @@
 
 > 先准备Java的运行环境，我是使用[OpenJdk11.0.2](https://jdk.java.net/11/)进行开发
 
-> 然后配置相应的配置文件和打包好的jar放在[Releases](https://github.com/ThisSeanZhang/APIT-Server/releases)下载的压缩包里
+> 配置相应的配置文件(application-prod.yml)和打包好的jar放在[Releases](https://github.com/ThisSeanZhang/APIT-Server/releases)下载的压缩包里
 
 > 目前是直接贴了Spring Boot的配置,后面会改进下的
 ```
@@ -29,7 +29,7 @@ spring:
 ```
 #### 然后运行
 ```$xslt
-$ java -jar -Dspring.profiles.active=prod ./对应的jar文件
+$ java -jar -Dspring.profiles.active=prod ./APIT-Server-v0.0.2-beta.jar
 ```
 > 或者使用Docker
 
@@ -45,7 +45,7 @@ ENV RUN_DIR /root
 WORKDIR /root
 
 #定义初始化sql文件
-ENV SERVER_JAR APIT-Server-v0.1-alpha.jar
+ENV SERVER_JAR APIT-Server-v0.0.2-beta.jar
 ENV SERVER_CONF application-prod.yml
 
 #拷贝文件
@@ -55,7 +55,7 @@ COPY ./$SERVER_CONF $RUN_DIR/
 EXPOSE 80
 
 #运行
-CMD ["java", "-jar", "-Dspring.profiles.active=prod", "./APIT-Server-v0.1-alpha.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "./APIT-Server-v0.0.2-beta.jar"]
 ```
 #### 完(后续再添加吧)
 

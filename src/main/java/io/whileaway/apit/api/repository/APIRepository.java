@@ -13,5 +13,5 @@ public interface APIRepository extends JpaRepository<API, Long> , JpaSpecificati
 
     Optional<List<API>> findByBelongFolder(Long belongNode);
 
-    Optional<API> findByAid(Long aid);
+    Optional<API> findByAidAndStatus(Long aid, Integer status);
 }

@@ -1,0 +1,30 @@
+stages:
+  - build
+  - deploy
+
+job_build:
+  stage: build
+  image: maven:3-jdk-11
+  script:
+    - mvn clean
+    - mvn install -DskipTests
+  tags:
+    - apit
+
+job_deploy:
+  stage: deploy
+  image: docker:stable
+  script:
+    - pwd
+    - cp /root/.m2/repository/io/whileaway/APIT-Server/0.0.2-beta/APIT-Server-0.0.2-beta.jar ./APIT-Server-0.0.2-beta.jar
+    - ls -la
+    - if [ $(docker ps -aq --filter name=apit_server) ]; then docker rm -f apit_server;fi
+    - if [ $(docker images -aq --filter=reference='apit_server:0.0.2') ]; then docker rmi apit_server:0.0.2;fi
+    - docker build -t apit_server:0.0.2 .
+    - docker run -d --net local_net --name apit_server apit_server:0.0.2
+    - docker restart main_nginx
+    - pwd
+    - ls -la
+    - echo "deploy over..."
+  tags:
+    - apit

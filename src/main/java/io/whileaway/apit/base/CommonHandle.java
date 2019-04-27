@@ -34,7 +34,7 @@ public class CommonHandle {
     @ResponseBody
     public Result jsonHandle(InvalidFormatException exception, HttpServletResponse response) {
         response.setStatus(400);
-        return ResultUtil.success(200,"测试",ResultUtil.invalidFormatDataMessage(exception.getMessage()));
+        return ResultUtil.success(400,"测试",ResultUtil.invalidFormatDataMessage(exception.getMessage()));
 //        return ResultUtil.success(200,"测试",exception.getMessage());
     }
 }
