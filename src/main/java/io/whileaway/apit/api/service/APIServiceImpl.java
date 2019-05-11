@@ -60,7 +60,10 @@ public class APIServiceImpl implements APIService {
 
     @Override
     public API updateApi(API updateApi) {
+        API api = getApi(updateApi.getAid());
         updateApi.setStatus(StatusDict.NORMAL.getCode());
+        updateApi.setExampleParams(api.getExampleParams());
+        updateApi.setResponseExample(api.getResponseExample());
         return apiRepository.save(updateApi);
     }
 
