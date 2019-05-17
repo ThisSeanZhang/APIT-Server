@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 public class CreateFolder {
 
-    @Length(max = 16, min = 4, message = "文件夹名称在4-16个字符之间")
+    @Length(max = 8, min = 1, message = "文件夹名称在1-8个字符之间")
     private String folderName;
     private Long parentId;
     private Long folderOwnerId;

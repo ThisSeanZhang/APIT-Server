@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 public class CreateProject {
 
-    @Length(max = 16, min = 4, message = "项目名称在4-16个字符之间")
+    @Length(max = 8, min = 1, message = "项目名称在1-8个字符之间")
     private String projectName;
     private Long projectOwner;
     private Boolean overt;
